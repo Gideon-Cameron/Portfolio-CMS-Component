@@ -1,31 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const skillGroups = {
-  Frontend: [
-    "HTML5",
-    "CSS3",
-    "JavaScript (ES6+)",
-    "TypeScript",
-    "React.js",
-    "Tailwind CSS",
-    "Responsive Design",
-    "UI/UX Design",
-  ],
-  Backend: [
-    "Node.js",
-    "Express.js",
-    "RESTful APIs",
-    "JWT Authentication",
-    "Jest (Testing)",
-  ],
-  "Version Control & Tools": ["Git", "GitHub", "VS Code"],
+type SkillsProps = {
+  sectionTitle: string;
+  skillGroups: Record<string, string[]>;
 };
 
-const categories = Object.keys(skillGroups) as Array<keyof typeof skillGroups>;
-
-const Skills = () => {
-  const [activeTab, setActiveTab] = useState<keyof typeof skillGroups>("Frontend");
+const Skills = ({ sectionTitle, skillGroups }: SkillsProps) => {
+  const categories = Object.keys(skillGroups) as Array<keyof typeof skillGroups>;
+  const [activeTab, setActiveTab] = useState<keyof typeof skillGroups>(categories[0]);
 
   return (
     <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
@@ -39,7 +22,7 @@ const Skills = () => {
       >
         <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">03.</span>
-          Skills & Tools
+          {sectionTitle}
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
       </motion.div>
