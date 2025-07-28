@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import type { IconType } from "react-icons";
 
 type Project = {
   id: number;
@@ -10,7 +11,7 @@ type Project = {
   live: string;
   stack: {
     name: string;
-    icon: React.ReactNode;
+    icon: IconType;
   }[];
 };
 
@@ -147,15 +148,18 @@ const Projects = ({ sectionTitle, projects, oneLiners }: ProjectsProps) => {
               <div className="mt-6">
                 <h4 className="text-sm font-semibold mb-2 text-[#64ffda]">Tech Stack</h4>
                 <div className="flex flex-wrap gap-3">
-                  {selected.stack.map((tech, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center gap-2 text-sm text-[#ccd6f6] bg-[#112240] px-3 py-1 rounded-full shadow border border-[#64ffda]/30"
-                    >
-                      {tech.icon}
-                      <span className="text-xs">{tech.name}</span>
-                    </div>
-                  ))}
+                  {selected.stack.map((tech, index) => {
+                    const Icon = tech.icon;
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-center gap-2 text-sm text-[#ccd6f6] bg-[#112240] px-3 py-1 rounded-full shadow border border-[#64ffda]/30"
+                      >
+                        <Icon className="text-lg" />
+                        <span className="text-xs">{tech.name}</span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 

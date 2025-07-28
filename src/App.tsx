@@ -8,8 +8,7 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Testimonial from "./components/Testimonial";
-import { heroContent, aboutContent, experienceContent, skillsContent } from "./data/defaultContent";
-
+import { heroContent, aboutContent, experienceContent, skillsContent, projectsContent } from "./data/defaultContent";
 const App = () => {
   return (
     <div className="bg-light-background text-light-textPrimary dark:bg-dark-background dark:text-dark-textPrimary transition-colors duration-300 font-sans">
@@ -36,7 +35,7 @@ const App = () => {
         </section>
 
         <section id="projects">
-          <Projects />
+        <Projects {...projectsContent} />
         </section>
 
         <section id="testimonials">
