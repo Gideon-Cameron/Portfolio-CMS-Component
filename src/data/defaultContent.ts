@@ -17,3 +17,41 @@ export const heroContent = {
     imageAlt: "Gideon Cameron",
   };
   
+
+  export const experienceContent = {
+    sectionTitle: "Where I've Worked",
+    experienceData: {
+      Freelance: {
+        title: "Frontend Developer",
+        context: "Freelance / Self-employed",
+        date: "2023 – Present",
+        points: [
+          "Built and deployed custom landing pages and portfolios using React and Tailwind.",
+          "Worked directly with clients to translate design ideas into responsive web interfaces.",
+          "Maintained accessibility and performance best practices in all projects.",
+        ],
+      },
+      Collaborative: {
+        title: "Collaborator",
+        context: "Open Source / Teams",
+        date: "2022 – 2023",
+        points: [
+          "Contributed to team-based projects with GitHub and version control.",
+          "Worked on frontend logic, styling, and component structure.",
+          "Participated in issue triage and feature planning in dev teams.",
+        ],
+      },
+      Personal: {
+        title: "Solo Developer",
+        context: "Self-led Projects",
+        date: "Ongoing",
+        points: [
+          "Built several full-stack applications to improve personal productivity.",
+          "Explored advanced React patterns, performance optimization, and deployment pipelines.",
+          "Designed and developed high-fidelity frontend UIs with React, TypeScript, and Tailwind CSS.",
+          "Completed projects like Space Tourism and Weather App to demonstrate responsive layout, accessibility, and component-driven design.",
+        ],
+      },
+    },
+  };
+  
