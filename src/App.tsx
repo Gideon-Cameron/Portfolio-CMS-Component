@@ -8,6 +8,7 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Testimonial from "./components/Testimonial";
+import { heroContent } from "./data/defaultContent";
 
 const App = () => {
   return (
@@ -19,7 +20,7 @@ const App = () => {
 
       <main className="pt-10 space-y-22 px-6 nav:pl-20 md:px-12">
         <section id="hero">
-          <Hero />
+        <Hero {...heroContent} />
         </section>
 
          <section id="about">
