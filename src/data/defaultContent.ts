@@ -259,3 +259,28 @@ export const heroContent = {
     },
   };
   
+
+  import arielImg from "../assets/ariel.jpg";
+
+export const testimonialsContent = {
+  sectionTitle: "Testimonials",
+  testimonials: [
+    {
+      name: "Ariel Candace",
+      title: "Marketing Strategist · Former Client",
+      image: arielImg,
+      text:
+        "Working with Gideon was a great experience from start to finish. I hired him to redesign and build a responsive personal portfolio website, and he delivered exactly what I needed — clean code, smooth animations, and a modern, user-friendly design. He was communicative throughout the process, took feedback seriously, and often went above and beyond to ensure perfection. I’d highly recommend him to anyone looking for a reliable and skilled frontend developer.",
+      links: [
+        {
+          label: "View on LinkedIn",
+          url: "https://www.linkedin.com/in/ariel-candace-646494272/",
+        },
+        {
+          label: "View Project",
+          url: "https://ariel-portfolio-ac.netlify.app/",
+        },
+      ],
+    },
+  ],
+};
