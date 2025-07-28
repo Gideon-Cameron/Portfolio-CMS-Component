@@ -8,7 +8,7 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Testimonial from "./components/Testimonial";
-import { heroContent, aboutContent, experienceContent } from "./data/defaultContent";
+import { heroContent, aboutContent, experienceContent, skillsContent } from "./data/defaultContent";
 
 const App = () => {
   return (
@@ -32,7 +32,7 @@ const App = () => {
         </section>
 
         <section id="skills">
-          <Skills />
+          <Skills {...skillsContent}/>
         </section>
 
         <section id="projects">
