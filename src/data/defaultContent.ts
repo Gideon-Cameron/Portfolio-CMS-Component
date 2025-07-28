@@ -55,3 +55,29 @@ export const heroContent = {
     },
   };
   
+
+
+  export const skillsContent = {
+    sectionTitle: "Skills & Tools",
+    skillGroups: {
+      Frontend: [
+        "HTML5",
+        "CSS3",
+        "JavaScript (ES6+)",
+        "TypeScript",
+        "React.js",
+        "Tailwind CSS",
+        "Responsive Design",
+        "UI/UX Design",
+      ],
+      Backend: [
+        "Node.js",
+        "Express.js",
+        "RESTful APIs",
+        "JWT Authentication",
+        "Jest (Testing)",
+      ],
+      "Version Control & Tools": ["Git", "GitHub", "VS Code"],
+    },
+  };
+  
