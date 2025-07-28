@@ -8,7 +8,7 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Testimonial from "./components/Testimonial";
-import { heroContent, aboutContent } from "./data/defaultContent";
+import { heroContent, aboutContent, experienceContent } from "./data/defaultContent";
 
 const App = () => {
   return (
@@ -28,7 +28,7 @@ const App = () => {
         </section>
 
         <section id="experience">
-          <Experience />
+          <Experience {...experienceContent}/>
         </section>
 
         <section id="skills">
