@@ -1,23 +1,55 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
-type AboutProps = {
-  sectionId?: string;
+type AboutContent = {
   title: string;
   paragraphs: string[];
   imageUrl: string;
-  imageAlt?: string;
 };
 
-const About = ({
-  sectionId = "about",
-  title,
-  paragraphs,
-  imageUrl,
-  imageAlt = "Profile image",
-}: AboutProps) => {
+const About = () => {
+  const [aboutData, setAboutData] = useState<AboutContent | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAbout = async () => {
+      try {
+        const docRef = doc(db, "content", "about");
+        const snap = await getDoc(docRef);
+        if (snap.exists()) {
+          const data = snap.data() as AboutContent;
+          setAboutData(data);
+          console.log("✅ About data loaded:", data);
+        } else {
+          console.warn("⚠️ About document does not exist.");
+        }
+      } catch (err) {
+        console.error("❌ Failed to fetch about data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAbout();
+  }, []);
+
+  if (loading || !aboutData) {
+    return (
+      <section
+        id="about"
+        className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-[#8892b0]"
+      >
+        Loading about section...
+      </section>
+    );
+  }
+
+  const { title, paragraphs, imageUrl } = aboutData;
+
   return (
     <section
-      id={sectionId}
+      id="about"
       className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 flex flex-col md:flex-row gap-12 items-center"
     >
       {/* LEFT - TEXT */}
@@ -40,7 +72,9 @@ const About = ({
           transition={{ delay: 0.1, duration: 0.6 }}
         >
           <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
-            <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">01.</span>
+            <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">
+              01.
+            </span>
             {title}
           </h2>
           <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#233554] relative -top-[0px]" />
@@ -73,7 +107,7 @@ const About = ({
         <div className="relative group w-64 h-64 rounded-md overflow-hidden shadow-lg">
           <img
             src={imageUrl}
-            alt={imageAlt}
+            alt="Profile image"
             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 rounded"
           />
           <div className="absolute inset-0 border-2 border-[#64ffda] rounded pointer-events-none" />
