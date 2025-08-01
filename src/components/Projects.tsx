@@ -1,30 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import type { IconType } from "react-icons";
+import { db } from "../lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 type Project = {
-  id: number;
-  name: string;
-  image: string;
+  id: string;
+  title: string;
+  shortDescription: string;
   description: string;
-  github: string;
-  live: string;
-  stack: {
-    name: string;
-    icon: IconType;
-  }[];
+  imageUrl: string;
+  liveUrl: string;
+  skills?: string[];
 };
 
-type ProjectsProps = {
-  sectionTitle: string;
-  projects: Project[];
-  oneLiners: Record<number, string>;
-};
-
-const Projects = ({ sectionTitle, projects, oneLiners }: ProjectsProps) => {
+const Projects = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
   const [selected, setSelected] = useState<Project | null>(null);
   const [showCount, setShowCount] = useState(3);
+  const [loading, setLoading] = useState(true);
+
   const handleClose = () => setSelected(null);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const snap = await getDoc(doc(db, "content", "projects"));
+        if (snap.exists()) {
+          const data = snap.data().items as Project[];
+          setProjects(data);
+          console.log("✅ Project data loaded:", data);
+        } else {
+          console.warn("⚠️ Projects document does not exist.");
+        }
+      } catch (err) {
+        console.error("❌ Error fetching project data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
+  if (loading) {
+    return (
+      <section id="projects" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-[#8892b0]">
+        Loading projects...
+      </section>
+    );
+  }
 
   return (
     <section id="projects" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
@@ -38,12 +61,12 @@ const Projects = ({ sectionTitle, projects, oneLiners }: ProjectsProps) => {
       >
         <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">04.</span>
-          {sectionTitle}
+          Projects
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
       </motion.div>
 
-      {/* Project Grid */}
+      {/* Grid */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
         initial="hidden"
@@ -64,19 +87,18 @@ const Projects = ({ sectionTitle, projects, oneLiners }: ProjectsProps) => {
             <div className="bg-[#f1f5f9] dark:bg-[#112240] p-[15px] rounded-t overflow-hidden">
               <div className="w-full aspect-video relative">
                 <img
-                  src={project.image}
-                  alt={project.name}
+                  src={project.imageUrl}
+                  alt={project.title}
                   className="absolute inset-0 w-full h-full object-cover rounded"
                 />
               </div>
             </div>
-
             <div className="p-4 flex flex-col items-start gap-2">
               <h3 className="text-lg font-semibold text-[#111827] dark:text-[#ccd6f6]">
-                {project.name}
+                {project.title}
               </h3>
               <p className="text-sm text-[#4b5563] dark:text-[#8892b0] italic">
-                {oneLiners[project.id]}
+                {project.shortDescription}
               </p>
               <button
                 onClick={() => setSelected(project)}
@@ -133,50 +155,42 @@ const Projects = ({ sectionTitle, projects, oneLiners }: ProjectsProps) => {
             <div className="md:w-[45%] bg-[#f1f5f9] dark:bg-[#112240] rounded">
               <div className="p-[5px]">
                 <img
-                  src={selected.image}
-                  alt={selected.name}
+                  src={selected.imageUrl}
+                  alt={selected.title}
                   className="w-full h-auto object-cover rounded"
                 />
               </div>
             </div>
 
             <div className="flex-1 text-[#111827] dark:text-[#ccd6f6]">
-              <h3 className="text-2xl font-semibold mb-4">{selected.name}</h3>
+              <h3 className="text-2xl font-semibold mb-4">{selected.title}</h3>
               <p className="mb-6 whitespace-pre-line text-[#4b5563] dark:text-[#8892b0]">
                 {selected.description}
               </p>
-              <div className="mt-6">
-                <h4 className="text-sm font-semibold mb-2 text-[#64ffda]">Tech Stack</h4>
-                <div className="flex flex-wrap gap-3">
-                  {selected.stack.map((tech, index) => {
-                    const Icon = tech.icon;
-                    return (
-                      <div
-                        key={index}
-                        className="flex items-center gap-2 text-sm text-[#ccd6f6] bg-[#112240] px-3 py-1 rounded-full shadow border border-[#64ffda]/30"
-                      >
-                        <Icon className="text-lg" />
-                        <span className="text-xs">{tech.name}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
 
-              <div className="mt-6 flex gap-4">
+              {selected.skills && (
+                <div className="mt-6">
+                  <h4 className="text-sm font-semibold mb-2 text-[#64ffda]">Skills</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selected.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="text-xs px-3 py-1 rounded-full bg-[#112240] text-[#64ffda] border border-[#64ffda]/30"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-6">
                 <a
-                  href={selected.github}
+                  href={selected.liveUrl}
                   target="_blank"
                   className="px-4 py-2 border border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda]/10 rounded transition cursor-pointer"
                 >
-                  Code
-                </a>
-                <a
-                  href={selected.live}
-                  target="_blank"
-                  className="px-4 py-2 border border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda]/10 rounded transition cursor-pointer"
-                >
-                  Preview
+                  Live Preview
                 </a>
               </div>
 
