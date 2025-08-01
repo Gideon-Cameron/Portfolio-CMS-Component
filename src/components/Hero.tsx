@@ -1,13 +1,51 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase"; // adjust path as needed
 
-type HeroProps = {
+type HeroContent = {
   intro: string;
   name: string;
   subtitle: string;
   description: string;
 };
 
-const Hero = ({ intro, name, subtitle, description }: HeroProps) => {
+const Hero = () => {
+  const [content, setContent] = useState<HeroContent | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHero = async () => {
+      try {
+        const ref = doc(db, "content", "hero");
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          const data = snap.data() as HeroContent;
+          setContent(data);
+          console.log("✅ Hero document data:", data);
+        } else {
+          console.warn("⚠️ Hero document does not exist.");
+        }
+      } catch (err) {
+        console.error("❌ Failed to fetch hero data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHero();
+  }, []);
+
+  if (loading || !content) {
+    return (
+      <section className="min-h-screen flex items-center justify-center text-[#8892b0] font-mono">
+        Loading hero content...
+      </section>
+    );
+  }
+
+  const { intro, name, subtitle, description } = content;
+
   return (
     <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 max-w-4xl mx-auto">
       <motion.p
