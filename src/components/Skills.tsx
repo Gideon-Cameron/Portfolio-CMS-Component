@@ -1,14 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
-type SkillsProps = {
-  sectionTitle: string;
-  skillGroups: Record<string, string[]>;
-};
+type SkillGroups = Record<string, string[]>;
 
-const Skills = ({ sectionTitle, skillGroups }: SkillsProps) => {
-  const categories = Object.keys(skillGroups) as Array<keyof typeof skillGroups>;
-  const [activeTab, setActiveTab] = useState<keyof typeof skillGroups>(categories[0]);
+const Skills = () => {
+  const [skillGroups, setSkillGroups] = useState<SkillGroups>({});
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        const snap = await getDoc(doc(db, "content", "skills"));
+        if (snap.exists()) {
+          const data = snap.data() as SkillGroups;
+          setSkillGroups(data);
+          const categories = Object.keys(data);
+          setActiveTab(categories[0] || null);
+          console.log("✅ Skill data loaded:", data);
+        } else {
+          console.warn("⚠️ Skills document does not exist.");
+        }
+      } catch (err) {
+        console.error("❌ Failed to fetch skills", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSkills();
+  }, []);
+
+  if (loading || !activeTab) {
+    return (
+      <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-[#8892b0]">
+        Loading skills...
+      </section>
+    );
+  }
+
+  const categories = Object.keys(skillGroups);
 
   return (
     <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
@@ -22,7 +54,7 @@ const Skills = ({ sectionTitle, skillGroups }: SkillsProps) => {
       >
         <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">03.</span>
-          {sectionTitle}
+          Skills
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
       </motion.div>
