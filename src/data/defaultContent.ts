@@ -260,6 +260,9 @@ export const heroContent = {
   };
   
 
+  
+
+
   import arielImg from "../assets/ariel.jpg";
 
 export const testimonialsContent = {
