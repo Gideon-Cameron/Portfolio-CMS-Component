@@ -26,9 +26,10 @@ const Projects = () => {
       try {
         const snap = await getDoc(doc(db, "content", "projects"));
         if (snap.exists()) {
-          const data = snap.data().items as Project[];
-          setProjects(data);
-          console.log("✅ Project data loaded:", data);
+          const data = snap.data();
+          const items = data.list as Project[]; // ✅ matches the Firestore shape
+          setProjects(items);
+          console.log("✅ Project data loaded:", items);
         } else {
           console.warn("⚠️ Projects document does not exist.");
         }
@@ -47,6 +48,10 @@ const Projects = () => {
         Loading projects...
       </section>
     );
+  }
+
+  if (!Array.isArray(projects)) {
+    return null;
   }
 
   return (
@@ -86,11 +91,13 @@ const Projects = () => {
           >
             <div className="bg-[#f1f5f9] dark:bg-[#112240] p-[15px] rounded-t overflow-hidden">
               <div className="w-full aspect-video relative">
-                <img
-                  src={project.imageUrl}
-                  alt={project.title}
-                  className="absolute inset-0 w-full h-full object-cover rounded"
-                />
+                {project.imageUrl && (
+                  <img
+                    src={project.imageUrl}
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover rounded"
+                  />
+                )}
               </div>
             </div>
             <div className="p-4 flex flex-col items-start gap-2">
@@ -154,11 +161,13 @@ const Projects = () => {
           >
             <div className="md:w-[45%] bg-[#f1f5f9] dark:bg-[#112240] rounded">
               <div className="p-[5px]">
-                <img
-                  src={selected.imageUrl}
-                  alt={selected.title}
-                  className="w-full h-auto object-cover rounded"
-                />
+                {selected.imageUrl && (
+                  <img
+                    src={selected.imageUrl}
+                    alt={selected.title}
+                    className="w-full h-auto object-cover rounded"
+                  />
+                )}
               </div>
             </div>
 
