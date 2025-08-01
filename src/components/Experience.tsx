@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 type ExperienceItem = {
   title: string;
@@ -8,14 +10,44 @@ type ExperienceItem = {
   points: string[];
 };
 
-type ExperienceProps = {
-  sectionTitle: string;
-  experienceData: Record<string, ExperienceItem>;
-};
+const Experience = () => {
+  const [experienceData, setExperienceData] = useState<Record<string, ExperienceItem>>({});
+  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-const Experience = ({ sectionTitle, experienceData }: ExperienceProps) => {
-  const tabs = Object.keys(experienceData) as Array<keyof typeof experienceData>;
-  const [activeTab, setActiveTab] = useState<keyof typeof experienceData>(tabs[0]);
+  useEffect(() => {
+    const fetchExperience = async () => {
+      try {
+        const snap = await getDoc(doc(db, "content", "experience"));
+        if (snap.exists()) {
+          const data = snap.data() as Record<string, ExperienceItem>;
+          setExperienceData(data);
+          setActiveTab(Object.keys(data)[0] || null);
+          console.log("✅ Experience data loaded:", data);
+        } else {
+          console.warn("⚠️ Experience document does not exist.");
+        }
+      } catch (err) {
+        console.error("❌ Failed to fetch experience data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExperience();
+  }, []);
+
+  if (loading || !activeTab) {
+    return (
+      <section
+        id="experience"
+        className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-[#8892b0]"
+      >
+        Loading experience...
+      </section>
+    );
+  }
+
+  const tabs = Object.keys(experienceData);
 
   return (
     <section id="experience" className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24">
@@ -29,7 +61,7 @@ const Experience = ({ sectionTitle, experienceData }: ExperienceProps) => {
       >
         <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">02.</span>
-          {sectionTitle}
+          Experience
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
       </motion.div>
@@ -84,7 +116,9 @@ const Experience = ({ sectionTitle, experienceData }: ExperienceProps) => {
         >
           <h3 className="text-xl font-semibold text-[#111827] dark:text-[#ccd6f6]">
             {experienceData[activeTab].title}{" "}
-            <span className="text-[#007acc] dark:text-[#64ffda]">@ {experienceData[activeTab].context}</span>
+            <span className="text-[#007acc] dark:text-[#64ffda]">
+              @ {experienceData[activeTab].context}
+            </span>
           </h3>
           <p className="text-sm font-mono text-[#4b5563] dark:text-[#8892b0] mb-4">
             {experienceData[activeTab].date}
