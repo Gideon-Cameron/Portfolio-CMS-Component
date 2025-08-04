@@ -72,9 +72,7 @@ const About = () => {
           transition={{ delay: 0.1, duration: 0.6 }}
         >
           <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
-            <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">
-              01.
-            </span>
+            <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">01.</span>
             {title}
           </h2>
           <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#233554] relative -top-[0px]" />
@@ -105,11 +103,17 @@ const About = () => {
         viewport={{ once: true }}
       >
         <div className="relative group w-64 h-64 rounded-md overflow-hidden shadow-lg">
-          <img
-            src={imageUrl}
-            alt="Profile image"
-            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 rounded"
-          />
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt="Profile image"
+              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 rounded"
+            />
+          ) : (
+            <div className="w-full h-full bg-[#112240] flex items-center justify-center text-[#64ffda] text-sm">
+              No image uploaded
+            </div>
+          )}
           <div className="absolute inset-0 border-2 border-[#64ffda] rounded pointer-events-none" />
         </div>
       </motion.div>
