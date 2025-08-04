@@ -1,9 +1,52 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { testimonialsContent } from "../data/defaultContent";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
 import TestimonialCard from "./TestimonialCard";
 
+type Testimonial = {
+  name: string;
+  imageUrl: string;
+  quote: string;
+  projectLink?: string;
+};
+
 const Testimonial = () => {
-  const { sectionTitle, testimonials } = testimonialsContent;
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const snap = await getDoc(doc(db, "content", "testimonials"));
+        if (snap.exists()) {
+          const data = snap.data();
+          const items = data.items as Testimonial[];
+          setTestimonials(items);
+          console.log("✅ Testimonials loaded:", items);
+        } else {
+          console.warn("⚠️ Testimonials document does not exist.");
+        }
+      } catch (err) {
+        console.error("❌ Error fetching testimonials", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  if (loading) {
+    return (
+      <section
+        id="testimonials"
+        className="max-w-4xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-[#8892b0]"
+      >
+        Loading testimonials...
+      </section>
+    );
+  }
 
   return (
     <section
@@ -20,7 +63,7 @@ const Testimonial = () => {
       >
         <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">05.</span>
-          {sectionTitle}
+          Testimonials
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
       </motion.div>
