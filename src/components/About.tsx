@@ -22,6 +22,7 @@ const About = () => {
           const data = snap.data() as AboutContent;
           setAboutData(data);
           console.log("✅ About data loaded:", data);
+          console.log("🖼️ Image URL:", data.imageUrl);
         } else {
           console.warn("⚠️ About document does not exist.");
         }
@@ -103,7 +104,7 @@ const About = () => {
         viewport={{ once: true }}
       >
         <div className="relative group w-64 h-64 rounded-md overflow-hidden shadow-lg">
-          {imageUrl ? (
+          {imageUrl?.trim() ? (
             <img
               src={imageUrl}
               alt="Profile image"

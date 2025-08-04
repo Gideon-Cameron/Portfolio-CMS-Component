@@ -81,9 +81,9 @@ const Projects = () => {
           visible: { transition: { staggerChildren: 0.15 } },
         }}
       >
-        {projects.slice(0, showCount).map((project) => (
+        {projects.slice(0, showCount).map((project, index) => (
           <motion.div
-            key={project.id}
+          key={project.id || `${project.title}-${index}`}
             className="bg-white dark:bg-[#0a192f] border border-[#64ffda]/30 rounded shadow-sm transition hover:ring-2 hover:ring-[#64ffda]/30 hover:shadow-md"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
