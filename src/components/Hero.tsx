@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../lib/firebase"; // adjust path as needed
+import { db } from "../lib/firebase"; 
 
 type HeroContent = {
   intro: string;
