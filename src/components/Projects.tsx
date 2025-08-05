@@ -119,22 +119,24 @@ const Projects = () => {
       </motion.div>
 
       {/* Toggle Button */}
-{projects.length > 3 && showCount < projects.length && (
-  <motion.div
-    className="mt-12 flex justify-center"
-    initial={{ opacity: 0, y: 10 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay: 0.3 }}
-    viewport={{ once: true }}
-  >
-    <button
-      onClick={() => setShowCount(projects.length)}
-      className="px-6 py-2 border border-[#64ffda] text-[#64ffda] rounded hover:bg-[#64ffda]/10 transition cursor-pointer"
-    >
-      View More
-    </button>
-  </motion.div>
+      {/* Toggle Button */}
+       {projects.length > 3 && (
+        <motion.div
+          className="mt-12 flex justify-center"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          viewport={{ once: true }}
+        >
+        <button
+          onClick={() => setShowCount(showCount === 3 ? projects.length : 3)}
+          className="px-6 py-2 border border-[#64ffda] text-[#64ffda] rounded hover:bg-[#64ffda]/10 transition cursor-pointer"
+        >
+        {showCount === 3 ? "View More" : "Show Less"}
+        </button>
+        </motion.div>
 )}
+
 
 
       {/* Modal */}
