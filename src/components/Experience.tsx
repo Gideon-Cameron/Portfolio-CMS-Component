@@ -20,10 +20,21 @@ const Experience = () => {
       try {
         const snap = await getDoc(doc(db, "content", "experience"));
         if (snap.exists()) {
-          const data = snap.data() as Record<string, ExperienceItem>;
-          setExperienceData(data);
-          setActiveTab(Object.keys(data)[0] || null);
-          console.log("✅ Experience data loaded:", data);
+          const rawData = snap.data() as Record<string, ExperienceItem>;
+
+          // Filter out experiences with no meaningful content
+          const filteredData = Object.fromEntries(
+            Object.entries(rawData).filter(([_, exp]) => {
+              const hasTitle = exp.title?.trim();
+              const hasContext = exp.context?.trim();
+              const hasPoints = exp.points?.some((pt) => pt.trim());
+              return hasTitle || hasContext || hasPoints;
+            })
+          );
+
+          setExperienceData(filteredData);
+          setActiveTab(Object.keys(filteredData)[0] || null);
+          console.log("✅ Experience data loaded:", filteredData);
         } else {
           console.warn("⚠️ Experience document does not exist.");
         }
@@ -33,6 +44,7 @@ const Experience = () => {
         setLoading(false);
       }
     };
+
     fetchExperience();
   }, []);
 
@@ -106,37 +118,49 @@ const Experience = () => {
         </motion.div>
 
         {/* Content */}
-        <motion.div
-          className="md:w-3/4"
-          key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 10 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h3 className="text-xl font-semibold text-[#111827] dark:text-[#ccd6f6]">
-            {experienceData[activeTab].title}{" "}
-            <span className="text-[#007acc] dark:text-[#64ffda]">
-              @ {experienceData[activeTab].context}
-            </span>
-          </h3>
-          <p className="text-sm font-mono text-[#4b5563] dark:text-[#8892b0] mb-4">
-            {experienceData[activeTab].date}
-          </p>
-          <ul className="list-disc ml-5 space-y-2 text-[#4b5563] dark:text-[#8892b0]">
-            {experienceData[activeTab].points.map((point, i) => (
-              <motion.li
-                key={i}
-                className="leading-relaxed"
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 }}
-              >
-                {point}
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
+        {activeTab && (
+          <motion.div
+            className="md:w-3/4"
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.5 }}
+          >
+            {experienceData[activeTab].title?.trim() && (
+              <h3 className="text-xl font-semibold text-[#111827] dark:text-[#ccd6f6]">
+                {experienceData[activeTab].title}{" "}
+                {experienceData[activeTab].context?.trim() && (
+                  <span className="text-[#007acc] dark:text-[#64ffda]">
+                    @ {experienceData[activeTab].context}
+                  </span>
+                )}
+              </h3>
+            )}
+
+            {experienceData[activeTab].date?.trim() && (
+              <p className="text-sm font-mono text-[#4b5563] dark:text-[#8892b0] mb-4">
+                {experienceData[activeTab].date}
+              </p>
+            )}
+
+            <ul className="list-disc ml-5 space-y-2 text-[#4b5563] dark:text-[#8892b0]">
+              {experienceData[activeTab].points
+                .filter((point) => point.trim() !== "")
+                .map((point, i) => (
+                  <motion.li
+                    key={i}
+                    className="leading-relaxed"
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    {point}
+                  </motion.li>
+                ))}
+            </ul>
+          </motion.div>
+        )}
       </motion.div>
     </section>
   );
