@@ -119,30 +119,23 @@ const Projects = () => {
       </motion.div>
 
       {/* Toggle Button */}
-      <motion.div
-        className="mt-12 flex justify-center"
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-        viewport={{ once: true }}
-      >
-        {showCount < projects.length ? (
-          <button
-            onClick={() => setShowCount(projects.length)}
-            className="px-6 py-2 border border-[#64ffda] text-[#64ffda] rounded hover:bg-[#64ffda]/10 transition cursor-pointer"
-          >
-            Show More
-          </button>
-        ) : (
-          <a
-            href="https://github.com/Gideon-Cameron"
-            target="_blank"
-            className="px-6 py-2 border border-[#64ffda] text-[#64ffda] rounded hover:bg-[#64ffda]/10 transition cursor-pointer"
-          >
-            Explore More on GitHub
-          </a>
-        )}
-      </motion.div>
+{projects.length > 3 && showCount < projects.length && (
+  <motion.div
+    className="mt-12 flex justify-center"
+    initial={{ opacity: 0, y: 10 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5, delay: 0.3 }}
+    viewport={{ once: true }}
+  >
+    <button
+      onClick={() => setShowCount(projects.length)}
+      className="px-6 py-2 border border-[#64ffda] text-[#64ffda] rounded hover:bg-[#64ffda]/10 transition cursor-pointer"
+    >
+      View More
+    </button>
+  </motion.div>
+)}
+
 
       {/* Modal */}
       {selected && (
