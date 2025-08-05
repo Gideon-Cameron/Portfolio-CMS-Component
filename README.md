@@ -1,43 +1,58 @@
-# Gideon Cameron — Developer Portfolio 🚀
+# 💼 Developer Portfolio (Frontend)
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/9f3c2b34-3d5e-4d89-a6e3-bcb8c3fd0a1a/deploy-status)](https://gideon-portfolio-gc.netlify.app/)
-![GitHub last commit](https://img.shields.io/github/last-commit/Gideon-Cameron/your-repo-name?color=64ffda)
-![GitHub repo size](https://img.shields.io/github/repo-size/Gideon-Cameron/your-repo-name?color=007acc)
+This is the **public-facing portfolio website** powered by modern technologies and connected to a CMS admin dashboard via Firebase. It showcases the developer’s work, experience, skills, and social presence — all dynamically editable.
 
-## 🌐 Live Site
+---
 
-🔗 [gideon-portfolio-gc.netlify.app](https://gideon-portfolio-gc.netlify.app/)
+## ✨ Features
 
-## 🧩 About
+- 🔥 **Fully responsive design** (desktop + mobile)
+- 🎨 **Animated UI** with [Framer Motion](https://www.framer.com/motion/)
+- ⚙️ **Real-time data** pulled from Firebase Firestore
+- 🌐 **Live project previews**, image modals, and testimonials
+- 🧩 **Modular section-based layout**
+---
 
-This is my personal developer portfolio, designed and built from scratch using:
+## 🚀 Tech Stack
 
-- **React + TypeScript**
-- **Tailwind CSS**
-- Fully responsive layout
-- Dark-mode–first UI
-- Smooth scroll navigation
-- Animated project modals and section transitions
-- EmailJS-powered contact form
+- **React + Vite** – Lightweight, fast frontend
+- **TypeScript** – Fully typed for safety and scalability
+- **Tailwind CSS** – Rapidly styled with utility classes
+- **Framer Motion** – Smooth animations and transitions
+- **Firebase Firestore** – Dynamic content and structure
+- **Cloudinary** – Asset management (images for projects/testimonials)
+- **React Router DOM** – Navigation between routes
+- **React Icons** – Scalable icon support for social links
 
-## 🚀 Lighthouse Score (Latest Audit)
+---
 
-| Metric          | Score |
-|------------------|-------|
-| Performance      | 95 ✅ |
-| Accessibility    | 100 ✅ |
-| Best Practices   | 100 ✅ |
-| SEO              | 100 ✅ |
+## 🔧 Sections Included
 
-Audited using Chrome DevTools Lighthouse, Desktop mode.
+- **Hero** – Introduction and CTA
+- **About** – Developer background
+- **Experience** – Editable work timeline
+- **Skills** – Stack showcase
+- **Projects** – Interactive grid with details
+- **Testimonials** – Client/peer feedback
+- **Social Links Sidebar** – Displays only what is set in admin
+- **Footer** – Minimal and clean
 
-## 🖥️ Tech Stack
+---
 
-- **React + Vite**
-- **TypeScript**
-- **Tailwind CSS**
-- **EmailJS** (for contact form)
-- **Netlify** (for deployment)
+## 🔗 Dynamic Content
 
-## 📂 Folder Structure
+All sections (projects, experience, testimonials, etc.) are **fetched from Firebase Firestore**, which is managed from the **admin dashboard**. Changes made in the admin are reflected live on the portfolio.
 
+---
+
+## 🛠 Setup
+
+This frontend is tightly coupled with a Firebase backend. To connect:
+
+1. Set up your Firebase project and Firestore (see [Project Setup Guide](../Project%20Setup%20Guide.txt))
+2. Configure your Firebase credentials in `/lib/firebase.ts`
+3. Run the project:
+
+```bash
+npm install
+npm run dev
