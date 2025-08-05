@@ -6,7 +6,6 @@ import {
   FaTelegram,
   FaFacebook,
   FaInstagram,
-  // FaXTwitter,
   FaYoutube,
   FaTiktok,
   FaEnvelope,
@@ -22,13 +21,11 @@ import { db } from "../lib/firebase";
 // Type for each social link
 type SocialLink = string;
 
-// Utility: detects platform and returns JSX icon
 function getIconForUrl(url: string): JSX.Element | null {
   if (url.includes("linkedin.com")) return <FaLinkedin className="w-5 h-5" />;
   if (url.includes("github.com")) return <FaGithub className="w-5 h-5" />;
   if (url.includes("facebook.com")) return <FaFacebook className="w-5 h-5" />;
   if (url.includes("instagram.com")) return <FaInstagram className="w-5 h-5" />;
-  // if (url.includes("x.com") || url.includes("twitter.com")) return <FaXTwitter className="w-5 h-5" />;
   if (url.includes("youtube.com")) return <FaYoutube className="w-5 h-5" />;
   if (url.includes("tiktok.com")) return <FaTiktok className="w-5 h-5" />;
   if (url.includes("t.me") || url.includes("telegram.me")) return <FaTelegram className="w-5 h-5" />;
