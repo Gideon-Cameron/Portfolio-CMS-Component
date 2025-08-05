@@ -193,15 +193,19 @@ const Projects = () => {
                 </div>
               )}
 
-              <div className="mt-6">
-                <a
-                  href={selected.liveUrl}
-                  target="_blank"
-                  className="px-4 py-2 border border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda]/10 rounded transition cursor-pointer"
-                >
-                  Live Preview
-                </a>
-              </div>
+{selected.liveUrl?.trim() && (
+  <div className="mt-6">
+    <a
+      href={selected.liveUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="px-4 py-2 border border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda]/10 rounded transition cursor-pointer"
+    >
+      Live Preview
+    </a>
+  </div>
+)}
+
 
               <button
                 onClick={handleClose}
