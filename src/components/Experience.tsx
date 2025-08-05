@@ -22,19 +22,27 @@ const Experience = () => {
         if (snap.exists()) {
           const rawData = snap.data() as Record<string, ExperienceItem>;
 
-          // Filter out experiences with no meaningful content
-          const filteredData = Object.fromEntries(
-            Object.entries(rawData).filter(([_, exp]) => {
-              const hasTitle = exp.title?.trim();
-              const hasContext = exp.context?.trim();
-              const hasPoints = exp.points?.some((pt) => pt.trim());
-              return hasTitle || hasContext || hasPoints;
-            })
-          );
+          // Sort keys numerically by their suffix (Experience1, Experience2, ...)
+          const sortedKeys = Object.keys(rawData).sort((a, b) => {
+            const numA = parseInt(a.replace(/\D/g, ""), 10);
+            const numB = parseInt(b.replace(/\D/g, ""), 10);
+            return numA - numB;
+          });
 
-          setExperienceData(filteredData);
-          setActiveTab(Object.keys(filteredData)[0] || null);
-          console.log("✅ Experience data loaded:", filteredData);
+          const filteredSortedData = sortedKeys.reduce((acc, key) => {
+            const item = rawData[key];
+            const hasContent =
+              item.title?.trim() ||
+              item.context?.trim() ||
+              item.date?.trim() ||
+              item.points?.some((pt) => pt.trim());
+            if (hasContent) acc[key] = item;
+            return acc;
+          }, {} as Record<string, ExperienceItem>);
+
+          setExperienceData(filteredSortedData);
+          setActiveTab(Object.keys(filteredSortedData)[0] || null);
+          console.log("✅ Experience data loaded:", filteredSortedData);
         } else {
           console.warn("⚠️ Experience document does not exist.");
         }
@@ -110,7 +118,7 @@ const Experience = () => {
                   }`}
                   onClick={() => setActiveTab(tab)}
                 >
-                  {tab}
+                  {experienceData[tab].title?.trim() || "Untitled"}
                 </button>
               </motion.li>
             ))}
