@@ -22,7 +22,6 @@ const Experience = () => {
         if (snap.exists()) {
           const rawData = snap.data() as Record<string, ExperienceItem>;
 
-          // Sort keys numerically by their suffix (Experience1, Experience2, ...)
           const sortedKeys = Object.keys(rawData).sort((a, b) => {
             const numA = parseInt(a.replace(/\D/g, ""), 10);
             const numB = parseInt(b.replace(/\D/g, ""), 10);
@@ -60,7 +59,7 @@ const Experience = () => {
     return (
       <section
         id="experience"
-        className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-[#8892b0]"
+        className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary"
       >
         Loading experience...
       </section>
@@ -79,11 +78,11 @@ const Experience = () => {
         transition={{ duration: 0.6, delay: 0.1 }}
         viewport={{ once: true }}
       >
-        <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">02.</span>
+        <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">02.</span>
           Where I've Worked
         </h2>
-        <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
+        <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
       </motion.div>
 
       {/* Layout */}
@@ -101,7 +100,10 @@ const Experience = () => {
         }}
       >
         {/* Tabs */}
-        <motion.div className="md:w-1/4 border-l border-[#8892b0]" variants={{ hidden: {}, visible: {} }}>
+        <motion.div
+          className="md:w-1/4 border-l border-dark-textSecondary"
+          variants={{ hidden: {}, visible: {} }}
+        >
           <ul className="flex md:flex-col text-sm font-mono">
             {tabs.map((tab, i) => (
               <motion.li
@@ -113,8 +115,8 @@ const Experience = () => {
                 <button
                   className={`w-full text-left px-4 py-3 transition-colors duration-200 ${
                     activeTab === tab
-                      ? "border-l-2 border-[#64ffda] text-[#64ffda] dark:text-[#64ffda] bg-[#64ffda]/[0.05]"
-                      : "text-[#4b5563] dark:text-[#8892b0] hover:bg-[#64ffda]/[0.03] hover:text-[#64ffda]"
+                      ? "border-l-2 border-dark-accent text-dark-accent dark:text-dark-accent bg-dark-accent/5"
+                      : "text-light-textSecondary dark:text-dark-textSecondary hover:bg-dark-accent/5 hover:text-dark-accent"
                   }`}
                   onClick={() => setActiveTab(tab)}
                 >
@@ -136,10 +138,10 @@ const Experience = () => {
             transition={{ duration: 0.5 }}
           >
             {experienceData[activeTab].title?.trim() && (
-              <h3 className="text-xl font-semibold text-[#111827] dark:text-[#ccd6f6]">
+              <h3 className="text-xl font-semibold text-light-textPrimary dark:text-dark-textPrimary">
                 {experienceData[activeTab].title}{" "}
                 {experienceData[activeTab].context?.trim() && (
-                  <span className="text-[#007acc] dark:text-[#64ffda]">
+                  <span className="text-light-accent dark:text-dark-accent">
                     @ {experienceData[activeTab].context}
                   </span>
                 )}
@@ -147,12 +149,12 @@ const Experience = () => {
             )}
 
             {experienceData[activeTab].date?.trim() && (
-              <p className="text-sm font-mono text-[#4b5563] dark:text-[#8892b0] mb-4">
+              <p className="text-sm font-mono text-light-textSecondary dark:text-dark-textSecondary mb-4">
                 {experienceData[activeTab].date}
               </p>
             )}
 
-            <ul className="list-disc ml-5 space-y-2 text-[#4b5563] dark:text-[#8892b0]">
+            <ul className="list-disc ml-5 space-y-2 text-light-textSecondary dark:text-dark-textSecondary">
               {experienceData[activeTab].points
                 .filter((point) => point.trim() !== "")
                 .map((point, i) => (
