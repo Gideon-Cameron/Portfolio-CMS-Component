@@ -8,22 +8,19 @@ export default {
         nav: "738px", // 👈 Custom breakpoint for navbar collapse
       },
       colors: {
-        // Dark mode (based on Brittany Chiang)
-        dark: {
-          background: "#0a192f",
-          textPrimary: "#ccd6f6",
-          textSecondary: "#8892b0",
-          accent: "#64ffda",
-          border: "#233554",
-        },
-        // Light mode (neutral, optional for later)
-        light: {
-          background: "#fdfdfd",
-          textPrimary: "#111827",
-          textSecondary: "#4b5563",
-          accent: "#007acc",
-          border: "#e5e7eb",
-        },
+        // 🔁 Flattened Light Mode
+        'light-background': "#fdfdfd",
+        'light-textPrimary': "#111827",
+        'light-textSecondary': "#4b5563",
+        'light-accent': "#007acc",
+        'light-border': "#e5e7eb",
+
+        // 🔁 Flattened Dark Mode
+        'dark-background': "#0a192f",
+        'dark-textPrimary': "#ccd6f6",
+        'dark-textSecondary': "#8892b0",
+        'dark-accent': "#64ffda",
+        'dark-border': "#233554",
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
