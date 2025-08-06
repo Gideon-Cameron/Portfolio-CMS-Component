@@ -34,7 +34,7 @@ const Skills = () => {
 
   if (loading || !activeTab) {
     return (
-      <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-[#8892b0]">
+      <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary">
         Loading skills...
       </section>
     );
@@ -52,11 +52,11 @@ const Skills = () => {
         transition={{ delay: 0.1, duration: 0.6 }}
         viewport={{ once: true }}
       >
-        <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">03.</span>
+        <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">03.</span>
           Skills
         </h2>
-        <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
+        <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
       </motion.div>
 
       {/* Tab Buttons */}
@@ -79,8 +79,8 @@ const Skills = () => {
             onClick={() => setActiveTab(category)}
             className={`px-4 py-2 rounded border transition text-sm font-mono ${
               activeTab === category
-                ? "bg-[#64ffda]/10 text-[#64ffda] border-[#64ffda]"
-                : "text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-[#64ffda] hover:text-[#64ffda]"
+                ? "bg-dark-accent/10 text-dark-accent border-dark-accent"
+                : "text-light-textSecondary dark:text-dark-textSecondary border-light-border dark:border-dark-textSecondary hover:border-dark-accent hover:text-dark-accent"
             }`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -111,7 +111,7 @@ const Skills = () => {
           {skillGroups[activeTab].map((skill) => (
             <motion.div
               key={skill}
-              className="text-center py-3 px-4 rounded text-sm text-[#111827] dark:text-[#ccd6f6] hover:text-[#007acc] dark:hover:text-[#64ffda] hover:bg-[#64ffda]/10 transition"
+              className="text-center py-3 px-4 rounded text-sm text-light-textPrimary dark:text-dark-textPrimary hover:text-light-accent dark:hover:text-dark-accent hover:bg-dark-accent/10 transition"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
