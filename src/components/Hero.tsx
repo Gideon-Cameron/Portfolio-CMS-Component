@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../lib/firebase"; 
+import { db } from "../lib/firebase";
 
 type HeroContent = {
   intro: string;
@@ -38,7 +38,7 @@ const Hero = () => {
 
   if (loading || !content) {
     return (
-      <section className="min-h-screen flex items-center justify-center text-[#8892b0] font-mono">
+      <section className="min-h-screen flex items-center justify-center text-dark-textSecondary font-mono">
         Loading hero content...
       </section>
     );
@@ -52,7 +52,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.6 }}
-        className="text-[#007acc] dark:text-[#64ffda] text-sm md:text-base font-mono mb-4"
+        className="text-light-accent dark:text-dark-accent text-sm md:text-base font-mono mb-4"
       >
         {intro}
       </motion.p>
@@ -61,7 +61,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35, duration: 0.6 }}
-        className="text-5xl sm:text-6xl md:text-7xl font-bold text-[#0f172a] dark:text-[#ccd6f6] mb-2 leading-tight"
+        className="text-5xl sm:text-6xl md:text-7xl font-bold text-light-textPrimary dark:text-dark-textPrimary mb-2 leading-tight"
       >
         {name}
       </motion.h1>
@@ -70,7 +70,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
-        className="text-4xl sm:text-5xl md:text-6xl font-semibold text-[#475569] dark:text-[#8892b0] mb-6 leading-tight"
+        className="text-4xl sm:text-5xl md:text-6xl font-semibold text-light-textSecondary dark:text-dark-textSecondary mb-6 leading-tight"
       >
         {subtitle}
       </motion.h2>
@@ -79,7 +79,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.65, duration: 0.6 }}
-        className="text-base sm:text-lg md:text-xl leading-relaxed text-[#0f172a] dark:text-[#8892b0] max-w-2xl"
+        className="text-base sm:text-lg md:text-xl leading-relaxed text-light-textPrimary dark:text-dark-textSecondary max-w-2xl"
       >
         {description}
       </motion.p>
