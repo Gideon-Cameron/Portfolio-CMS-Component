@@ -9,7 +9,11 @@ type AboutContent = {
   imageUrl: string;
 };
 
-const About = () => {
+type AboutProps = {
+  sectionNumber: number;
+};
+
+const About = ({ sectionNumber }: AboutProps) => {
   const [aboutData, setAboutData] = useState<AboutContent | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +26,6 @@ const About = () => {
           const data = snap.data() as AboutContent;
           setAboutData(data);
           console.log("✅ About data loaded:", data);
-          console.log("🖼️ Image URL:", data.imageUrl);
         } else {
           console.warn("⚠️ About document does not exist.");
         }
@@ -35,7 +38,7 @@ const About = () => {
     fetchAbout();
   }, []);
 
-  if (loading || !aboutData) {
+  if (loading) {
     return (
       <section
         id="about"
@@ -44,6 +47,15 @@ const About = () => {
         Loading about section...
       </section>
     );
+  }
+
+  if (
+    !aboutData ||
+    (!aboutData.title?.trim() &&
+      (!aboutData.paragraphs || aboutData.paragraphs.length === 0) &&
+      !aboutData.imageUrl?.trim())
+  ) {
+    return null;
   }
 
   const { title, paragraphs, imageUrl } = aboutData;
@@ -73,8 +85,10 @@ const About = () => {
           transition={{ delay: 0.1, duration: 0.6 }}
         >
           <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">01.</span>
-            {title}
+            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+              {String(sectionNumber).padStart(2, "0")}.
+            </span>
+            {title || "About Me"}
           </h2>
           <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-border relative -top-[0px]" />
         </motion.div>
