@@ -8,20 +8,20 @@ export default {
         nav: "738px", // 👈 Custom breakpoint for navbar collapse
       },
       colors: {
-        // 🔁 Flattened Light Mode
-        'light-background': "#fdfdfd",
-        'light-textPrimary': "#111827",
-        'light-textSecondary': "#4b5563",
-        'light-accent': "#007acc",
-        'light-border': "#e5e7eb",
+  // 🔁 Flattened Light Mode
+  'light-background': "#ffffff",            // white
+  'light-textPrimary': "#0f172a",           // slate-900
+  'light-textSecondary': "#475569",         // slate-600
+  'light-accent': "#6366f1",                // indigo-500
+  'light-border': "#e2e8f0",                // slate-200
 
-        // 🔁 Flattened Dark Mode
-        'dark-background': "#0a192f",
-        'dark-textPrimary': "#ccd6f6",
-        'dark-textSecondary': "#8892b0",
-        'dark-accent': "#64ffda",
-        'dark-border': "#233554",
-      },
+  // 🔁 Flattened Dark Mode
+  'dark-background': "#020617",             // slate-950
+  'dark-textPrimary': "#f1f5f9",            // slate-100
+  'dark-textSecondary': "#94a3b8",          // slate-400
+  'dark-accent': "#a5b4fc",                 // indigo-300
+  'dark-border': "#1e293b",                 // slate-800
+},
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         mono: ["Fira Code", "monospace"],
