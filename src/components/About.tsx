@@ -39,7 +39,7 @@ const About = () => {
     return (
       <section
         id="about"
-        className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-[#8892b0]"
+        className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary"
       >
         Loading about section...
       </section>
@@ -72,14 +72,14 @@ const About = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6 }}
         >
-          <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
-            <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">01.</span>
+          <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">01.</span>
             {title}
           </h2>
-          <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#233554] relative -top-[0px]" />
+          <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-border relative -top-[0px]" />
         </motion.div>
 
-        <div className="space-y-4 text-[#4b5563] dark:text-[#8892b0] text-base leading-relaxed">
+        <div className="space-y-4 text-light-textSecondary dark:text-dark-textSecondary text-base leading-relaxed">
           {paragraphs.map((text, index) => (
             <motion.p
               key={index}
@@ -111,11 +111,11 @@ const About = () => {
               className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 rounded"
             />
           ) : (
-            <div className="w-full h-full bg-[#112240] flex items-center justify-center text-[#64ffda] text-sm">
+            <div className="w-full h-full bg-dark-background-alt flex items-center justify-center text-dark-accent text-sm">
               No image uploaded
             </div>
           )}
-          <div className="absolute inset-0 border-2 border-[#64ffda] rounded pointer-events-none" />
+          <div className="absolute inset-0 border-2 border-dark-accent rounded pointer-events-none" />
         </div>
       </motion.div>
     </section>
