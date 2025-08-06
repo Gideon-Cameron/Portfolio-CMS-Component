@@ -50,7 +50,11 @@ const Projects = () => {
     );
   }
 
-  if (!Array.isArray(projects)) return null;
+  // 🚫 Skip section if no valid projects
+  const hasValidProjects = projects.some((p) => 
+    p.title?.trim() || p.shortDescription?.trim() || p.imageUrl?.trim()
+  );
+  if (!hasValidProjects) return null;
 
   return (
     <section id="projects" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
