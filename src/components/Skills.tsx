@@ -5,7 +5,11 @@ import { db } from "../lib/firebase";
 
 type SkillGroups = Record<string, string[]>;
 
-const Skills = () => {
+type SkillsProps = {
+  sectionNumber: number;
+};
+
+const Skills = ({ sectionNumber }: SkillsProps) => {
   const [skillGroups, setSkillGroups] = useState<SkillGroups>({});
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,19 +47,18 @@ const Skills = () => {
     (key) => Array.isArray(skillGroups[key]) && skillGroups[key].length > 0
   );
 
-  // ✅ If still loading
   if (loading) {
     return (
-      <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary">
+      <section
+        id="skills"
+        className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary"
+      >
         Loading skills...
       </section>
     );
   }
 
-  // ✅ If no skills to show
-  if (!activeTab || categories.length === 0) {
-    return null;
-  }
+  if (!activeTab || categories.length === 0) return null;
 
   return (
     <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
@@ -68,6 +71,7 @@ const Skills = () => {
         viewport={{ once: true }}
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+          <span className="mr-2">{String(sectionNumber).padStart(2, "0")}.</span>
           Skills
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />

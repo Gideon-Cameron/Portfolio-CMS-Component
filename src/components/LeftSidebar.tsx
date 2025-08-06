@@ -18,8 +18,11 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 
-// Type for each social link
-type SocialLink = string;
+// 🔁 Updated type
+type SocialLink = {
+  name: string;
+  url: string;
+};
 
 function getIconForUrl(url: string): JSX.Element | null {
   if (url.includes("linkedin.com")) return <FaLinkedin className="w-5 h-5" />;
@@ -47,9 +50,14 @@ const LeftSidebar = () => {
         const snap = await getDoc(doc(db, "content", "social"));
         if (snap.exists()) {
           const data = snap.data();
-          const linkList = (data.links || []).slice(0, 5) as SocialLink[];
-          setLinks(linkList);
-          console.log("✅ Social links loaded:", linkList);
+          const raw = data.links || [];
+
+          const structured: SocialLink[] = raw.map((item: any) =>
+            typeof item === "string" ? { name: "", url: item } : item
+          );
+
+          setLinks(structured.slice(0, 5));
+          console.log("✅ Social links loaded:", structured);
         } else {
           console.warn("⚠️ Social links document does not exist.");
         }
@@ -63,14 +71,14 @@ const LeftSidebar = () => {
 
   return (
     <div className="hidden nav:flex fixed bottom-0 left-0 pl-4 pr-2 flex-col items-center space-y-6 z-40">
-      {links.map((url, index) => {
-        const icon = getIconForUrl(url);
+      {links.map((link, index) => {
+        const icon = getIconForUrl(link.url);
         if (!icon) return null;
 
         return (
           <motion.a
-            key={url}
-            href={url}
+            key={link.url}
+            href={link.url}
             target="_blank"
             rel="noopener noreferrer"
             initial={{ opacity: 0, y: 10 }}
@@ -81,7 +89,8 @@ const LeftSidebar = () => {
               transition: { duration: 0.2 },
             }}
             className="text-gray-600 dark:text-gray-400"
-            aria-label={url}
+            title={link.name || link.url}
+            aria-label={link.name || link.url}
           >
             {icon}
           </motion.a>
