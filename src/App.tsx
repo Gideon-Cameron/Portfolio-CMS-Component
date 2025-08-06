@@ -8,34 +8,39 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Testimonial from "./components/Testimonial";
-import { heroContent, aboutContent, experienceContent, skillsContent, projectsContent } from "./data/defaultContent";
+import {
+  heroContent,
+  aboutContent,
+  experienceContent,
+  skillsContent,
+  projectsContent,
+} from "./data/defaultContent";
+
 const App = () => {
   return (
     <div className="bg-light-background text-light-textPrimary dark:bg-dark-background dark:text-dark-textPrimary transition-colors duration-300 font-sans">
       <LeftSidebar />
       <Navbar />
 
-      
-
       <main className="pt-10 space-y-22 px-6 nav:pl-20 md:px-12">
         <section id="hero">
-        <Hero {...heroContent} />
+          <Hero {...heroContent} />
         </section>
 
-         <section id="about">
+        <section id="about">
           <About {...aboutContent} />
         </section>
 
         <section id="experience">
-          <Experience {...experienceContent}/>
+          <Experience {...experienceContent} />
         </section>
 
         <section id="skills">
-          <Skills {...skillsContent}/>
+          <Skills {...skillsContent} />
         </section>
 
         <section id="projects">
-        <Projects {...projectsContent} />
+          <Projects {...projectsContent} />
         </section>
 
         <section id="testimonials">
