@@ -2,7 +2,11 @@ import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Contact = () => {
+type ContactProps = {
+  sectionNumber: number;
+};
+
+const Contact = ({ sectionNumber }: ContactProps) => {
   const form = useRef<HTMLFormElement>(null);
   const [messageSent, setMessageSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +51,9 @@ const Contact = () => {
         viewport={{ once: true }}
       >
         <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">06.</span>
+          <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">
+            {String(sectionNumber).padStart(2, "0")}.
+          </span>
           What’s Next?
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
