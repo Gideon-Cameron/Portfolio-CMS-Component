@@ -25,7 +25,7 @@ const Testimonial = ({ sectionNumber }: TestimonialProps) => {
         const snap = await getDoc(doc(db, "content", "testimonials"));
         if (snap.exists()) {
           const data = snap.data();
-          const items = data.items as Testimonial[];
+          const items = (data.items || []) as Testimonial[];
           const filtered = items.filter(
             (t) => t.name?.trim() || t.quote?.trim() || t.imageUrl?.trim()
           );
