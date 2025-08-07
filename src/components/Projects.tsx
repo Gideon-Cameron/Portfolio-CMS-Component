@@ -13,7 +13,11 @@ type Project = {
   skills?: string[];
 };
 
-const Projects = () => {
+type ProjectsProps = {
+  sectionNumber: number;
+};
+
+const Projects = ({ sectionNumber }: ProjectsProps) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selected, setSelected] = useState<Project | null>(null);
   const [showCount, setShowCount] = useState(3);
@@ -27,7 +31,7 @@ const Projects = () => {
         const snap = await getDoc(doc(db, "content", "projects"));
         if (snap.exists()) {
           const data = snap.data();
-          const items = data.list as Project[];
+          const items = (data.list || []) as Project[];
           setProjects(items);
           console.log("✅ Project data loaded:", items);
         } else {
@@ -50,9 +54,8 @@ const Projects = () => {
     );
   }
 
-  // 🚫 Skip section if no valid projects
-  const hasValidProjects = projects.some((p) => 
-    p.title?.trim() || p.shortDescription?.trim() || p.imageUrl?.trim()
+  const hasValidProjects = projects.some(
+    (p) => p.title?.trim() || p.shortDescription?.trim() || p.imageUrl?.trim()
   );
   if (!hasValidProjects) return null;
 
@@ -67,7 +70,9 @@ const Projects = () => {
         viewport={{ once: true }}
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">04.</span>
+          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+            {String(sectionNumber).padStart(2, "0")}.
+          </span>
           Projects
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
@@ -79,9 +84,7 @@ const Projects = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        variants={{
-          visible: { transition: { staggerChildren: 0.15 } },
-        }}
+        variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
       >
         {projects.slice(0, showCount).map((project, index) => (
           <motion.div
