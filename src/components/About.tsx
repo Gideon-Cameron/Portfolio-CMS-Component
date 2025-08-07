@@ -60,6 +60,8 @@ const About = ({ sectionNumber }: AboutProps) => {
 
   const { title, paragraphs, imageUrl } = aboutData;
 
+  const hasHeadingContent = title?.trim() || (paragraphs && paragraphs.length > 0);
+
   return (
     <section
       id="about"
@@ -77,21 +79,23 @@ const About = ({ sectionNumber }: AboutProps) => {
           hidden: {},
         }}
       >
-        {/* SECTION HEADING */}
-        <motion.div
-          className="flex items-center mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.6 }}
-        >
-          <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-              {String(sectionNumber).padStart(2, "0")}.
-            </span>
-            {title || "About Me"}
-          </h2>
-          <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-border relative -top-[0px]" />
-        </motion.div>
+        {/* SECTION HEADING (optional) */}
+        {hasHeadingContent && (
+          <motion.div
+            className="flex items-center mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+          >
+            <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+              <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+                {String(sectionNumber).padStart(2, "0")}.
+              </span>
+              {title || "About Me"}
+            </h2>
+            <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-border relative -top-[0px]" />
+          </motion.div>
+        )}
 
         <div className="space-y-4 text-light-textSecondary dark:text-dark-textSecondary text-base leading-relaxed">
           {paragraphs.map((text, index) => (

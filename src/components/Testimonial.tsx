@@ -11,7 +11,11 @@ type Testimonial = {
   projectLink?: string;
 };
 
-const Testimonial = () => {
+type TestimonialProps = {
+  sectionNumber?: number;
+};
+
+const Testimonial = ({ sectionNumber }: TestimonialProps) => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,8 +26,11 @@ const Testimonial = () => {
         if (snap.exists()) {
           const data = snap.data();
           const items = data.items as Testimonial[];
-          setTestimonials(items);
-          console.log("✅ Testimonials loaded:", items);
+          const filtered = items.filter(
+            (t) => t.name?.trim() || t.quote?.trim() || t.imageUrl?.trim()
+          );
+          setTestimonials(filtered);
+          console.log("✅ Testimonials loaded:", filtered);
         } else {
           console.warn("⚠️ Testimonials document does not exist.");
         }
@@ -48,6 +55,10 @@ const Testimonial = () => {
     );
   }
 
+  if (testimonials.length === 0) {
+    return null;
+  }
+
   return (
     <section
       id="testimonials"
@@ -62,7 +73,11 @@ const Testimonial = () => {
         viewport={{ once: true }}
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">05.</span>
+          {sectionNumber !== undefined && (
+            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+              {String(sectionNumber).padStart(2, "0")}.
+            </span>
+          )}
           Testimonials
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
