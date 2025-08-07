@@ -21,7 +21,7 @@ const Skills = ({ sectionNumber }: SkillsProps) => {
         if (snap.exists()) {
           const data = snap.data() as SkillGroups;
           const categories = Object.keys(data).filter(
-            (key) => Array.isArray(data[key]) && data[key].length > 0
+            (key) => Array.isArray(data[key]) && data[key].some((s) => s.trim())
           );
 
           if (categories.length > 0) {
@@ -44,7 +44,7 @@ const Skills = ({ sectionNumber }: SkillsProps) => {
   }, []);
 
   const categories = Object.keys(skillGroups).filter(
-    (key) => Array.isArray(skillGroups[key]) && skillGroups[key].length > 0
+    (key) => Array.isArray(skillGroups[key]) && skillGroups[key].some((s) => s.trim())
   );
 
   if (loading) {

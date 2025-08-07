@@ -10,7 +10,11 @@ type ExperienceItem = {
   points: string[];
 };
 
-const Experience = () => {
+type ExperienceProps = {
+  sectionNumber: number;
+};
+
+const Experience = ({ sectionNumber }: ExperienceProps) => {
   const [experienceData, setExperienceData] = useState<Record<string, ExperienceItem>>({});
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -55,7 +59,9 @@ const Experience = () => {
     fetchExperience();
   }, []);
 
-  if (loading || !activeTab) {
+  const tabs = Object.keys(experienceData);
+
+  if (loading) {
     return (
       <section
         id="experience"
@@ -66,7 +72,9 @@ const Experience = () => {
     );
   }
 
-  const tabs = Object.keys(experienceData);
+  if (!tabs.length) {
+    return null;
+  }
 
   return (
     <section id="experience" className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24">
@@ -79,7 +87,9 @@ const Experience = () => {
         viewport={{ once: true }}
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">02.</span>
+          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+            {String(sectionNumber).padStart(2, "0")}.
+          </span>
           Where I've Worked
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
