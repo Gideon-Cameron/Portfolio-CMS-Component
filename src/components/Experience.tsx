@@ -14,7 +14,9 @@ const Experience = () => {
   const [experienceData, setExperienceData] = useState<Record<string, ExperienceItem>>({});
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [sectionOrder, setSectionOrder] = useState<number>(3); // fallback
+
+  // ✅ Updated: store displayNumber as string
+  const [sectionNumber, setSectionNumber] = useState<string>("");
   const [enabled, setEnabled] = useState<boolean>(true);
 
   useEffect(() => {
@@ -23,13 +25,13 @@ const Experience = () => {
       try {
         const [dataSnap, metaSnap] = await Promise.all([
           getDoc(doc(db, "content", "experience")),
-          getDoc(doc(db, "content/sections", "experience")),
+          getDoc(doc(db, "sections", "experience")), // ✅ fixed collection path
         ]);
 
-        // Fetch section metadata
+        // ✅ Fetch section metadata with displayNumber
         if (metaSnap.exists()) {
           const meta = metaSnap.data();
-          setSectionOrder(meta.order ?? 3);
+          setSectionNumber(meta.displayNumber ?? ""); // ✅ use displayNumber instead of order
           setEnabled(meta.enabled ?? true);
           console.log("⚙️ Experience meta loaded:", meta);
         }
@@ -102,7 +104,7 @@ const Experience = () => {
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-            {String(sectionOrder).padStart(2, "0")}.
+            {sectionNumber?.toString().padStart(2, "0")}
           </span>
           Where I've Worked
         </h2>
