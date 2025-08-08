@@ -11,18 +11,27 @@ type Testimonial = {
   projectLink?: string;
 };
 
-type TestimonialProps = {
-  sectionNumber?: number;
-};
-
-const Testimonial = ({ sectionNumber }: TestimonialProps) => {
+const Testimonial = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [enabled, setEnabled] = useState(true);
+  const [sectionOrder, setSectionOrder] = useState(6); // fallback
 
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        const snap = await getDoc(doc(db, "content", "testimonials"));
+        const [snap, metaSnap] = await Promise.all([
+          getDoc(doc(db, "content", "testimonials")),
+          getDoc(doc(db, "content/sections", "testimonials")),
+        ]);
+
+        if (metaSnap.exists()) {
+          const meta = metaSnap.data();
+          setEnabled(meta.enabled ?? true);
+          setSectionOrder(meta.order ?? 6);
+          console.log("⚙️ Testimonials section meta loaded:", meta);
+        }
+
         if (snap.exists()) {
           const data = snap.data();
           const items = (data.items || []) as Testimonial[];
@@ -55,7 +64,8 @@ const Testimonial = ({ sectionNumber }: TestimonialProps) => {
     );
   }
 
-  if (testimonials.length === 0) {
+  if (!enabled || testimonials.length === 0) {
+    console.log("🚫 Testimonials section hidden or empty");
     return null;
   }
 
@@ -73,11 +83,9 @@ const Testimonial = ({ sectionNumber }: TestimonialProps) => {
         viewport={{ once: true }}
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-          {sectionNumber !== undefined && (
-            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-              {String(sectionNumber).padStart(2, "0")}.
-            </span>
-          )}
+          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+            {String(sectionOrder).padStart(2, "0")}.
+          </span>
           Testimonials
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />

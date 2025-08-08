@@ -13,24 +13,33 @@ type Project = {
   skills?: string[];
 };
 
-type ProjectsProps = {
-  sectionNumber: number;
-};
-
-const Projects = ({ sectionNumber }: ProjectsProps) => {
+const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selected, setSelected] = useState<Project | null>(null);
   const [showCount, setShowCount] = useState(3);
   const [loading, setLoading] = useState(true);
+  const [sectionOrder, setSectionOrder] = useState(5); // Default fallback
+  const [enabled, setEnabled] = useState(true);
 
   const handleClose = () => setSelected(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const snap = await getDoc(doc(db, "content", "projects"));
-        if (snap.exists()) {
-          const data = snap.data();
+        const [projectSnap, metaSnap] = await Promise.all([
+          getDoc(doc(db, "content", "projects")),
+          getDoc(doc(db, "content/sections", "projects")),
+        ]);
+
+        if (metaSnap.exists()) {
+          const meta = metaSnap.data();
+          setSectionOrder(meta.order ?? 5);
+          setEnabled(meta.enabled ?? true);
+          console.log("⚙️ Projects meta loaded:", meta);
+        }
+
+        if (projectSnap.exists()) {
+          const data = projectSnap.data();
           const items = (data.list || []) as Project[];
           setProjects(items);
           console.log("✅ Project data loaded:", items);
@@ -43,12 +52,16 @@ const Projects = ({ sectionNumber }: ProjectsProps) => {
         setLoading(false);
       }
     };
+
     fetchProjects();
   }, []);
 
   if (loading) {
     return (
-      <section id="projects" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary">
+      <section
+        id="projects"
+        className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary"
+      >
         Loading projects...
       </section>
     );
@@ -57,7 +70,11 @@ const Projects = ({ sectionNumber }: ProjectsProps) => {
   const hasValidProjects = projects.some(
     (p) => p.title?.trim() || p.shortDescription?.trim() || p.imageUrl?.trim()
   );
-  if (!hasValidProjects) return null;
+
+  if (!enabled || !hasValidProjects) {
+    console.log("🚫 Projects section hidden or empty");
+    return null;
+  }
 
   return (
     <section id="projects" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
@@ -71,7 +88,7 @@ const Projects = ({ sectionNumber }: ProjectsProps) => {
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-            {String(sectionNumber).padStart(2, "0")}.
+            {String(sectionOrder).padStart(2, "0")}.
           </span>
           Projects
         </h2>

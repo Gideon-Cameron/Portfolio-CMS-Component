@@ -5,21 +5,30 @@ import { db } from "../lib/firebase";
 
 type SkillGroups = Record<string, string[]>;
 
-type SkillsProps = {
-  sectionNumber: number;
-};
-
-const Skills = ({ sectionNumber }: SkillsProps) => {
+const Skills = () => {
   const [skillGroups, setSkillGroups] = useState<SkillGroups>({});
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sectionOrder, setSectionOrder] = useState<number>(4); // default order
+  const [enabled, setEnabled] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchSkills = async () => {
+    const fetchData = async () => {
       try {
-        const snap = await getDoc(doc(db, "content", "skills"));
-        if (snap.exists()) {
-          const data = snap.data() as SkillGroups;
+        const [contentSnap, metaSnap] = await Promise.all([
+          getDoc(doc(db, "content", "skills")),
+          getDoc(doc(db, "content/sections", "skills")),
+        ]);
+
+        if (metaSnap.exists()) {
+          const meta = metaSnap.data();
+          setSectionOrder(meta.order ?? 4);
+          setEnabled(meta.enabled ?? true);
+          console.log("⚙️ Skills meta loaded:", meta);
+        }
+
+        if (contentSnap.exists()) {
+          const data = contentSnap.data() as SkillGroups;
           const categories = Object.keys(data).filter(
             (key) => Array.isArray(data[key]) && data[key].some((s) => s.trim())
           );
@@ -40,7 +49,7 @@ const Skills = ({ sectionNumber }: SkillsProps) => {
       }
     };
 
-    fetchSkills();
+    fetchData();
   }, []);
 
   const categories = Object.keys(skillGroups).filter(
@@ -58,7 +67,10 @@ const Skills = ({ sectionNumber }: SkillsProps) => {
     );
   }
 
-  if (!activeTab || categories.length === 0) return null;
+  if (!enabled || !activeTab || categories.length === 0) {
+    console.log("🚫 Skills section hidden or empty");
+    return null;
+  }
 
   return (
     <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
@@ -71,7 +83,7 @@ const Skills = ({ sectionNumber }: SkillsProps) => {
         viewport={{ once: true }}
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-          <span className="mr-2">{String(sectionNumber).padStart(2, "0")}.</span>
+          <span className="mr-2">{String(sectionOrder).padStart(2, "0")}.</span>
           Skills
         </h2>
         <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />

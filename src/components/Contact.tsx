@@ -41,7 +41,10 @@ const Contact = ({ sectionNumber }: ContactProps) => {
   };
 
   return (
-    <section id="contact" className="max-w-4xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center">
+    <section
+      id="contact"
+      className="max-w-4xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center"
+    >
       {/* Heading */}
       <motion.div
         className="flex items-center justify-center mb-12"
@@ -50,18 +53,18 @@ const Contact = ({ sectionNumber }: ContactProps) => {
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
-        <h2 className="text-2xl font-bold text-[#007acc] dark:text-[#64ffda] font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-[#007acc] dark:text-[#64ffda]">
+        <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
             {String(sectionNumber).padStart(2, "0")}.
           </span>
           What’s Next?
         </h2>
-        <div className="h-px ml-5 flex-1 max-w-[300px] bg-[#8892b0] relative -top-[5px]" />
+        <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
       </motion.div>
 
       {/* Description & Button */}
       <motion.p
-        className="text-lg text-[#111827] dark:text-[#ccd6f6] mb-6 max-w-xl mx-auto"
+        className="text-lg text-light-textPrimary dark:text-dark-textPrimary mb-6 max-w-xl mx-auto"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ delay: 0.2, duration: 0.6 }}
@@ -74,7 +77,7 @@ const Contact = ({ sectionNumber }: ContactProps) => {
       {!showForm && (
         <motion.button
           onClick={() => setShowForm(true)}
-          className="px-6 py-2 border border-[#007acc] dark:border-[#64ffda] text-[#007acc] dark:text-[#64ffda] rounded hover:bg-[#007acc]/10 dark:hover:bg-[#64ffda]/10 transition"
+          className="px-6 py-2 border border-light-accent dark:border-dark-accent text-light-accent dark:text-dark-accent rounded hover:bg-light-accent/10 dark:hover:bg-dark-accent/10 transition"
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
@@ -90,7 +93,7 @@ const Contact = ({ sectionNumber }: ContactProps) => {
           <motion.form
             ref={form}
             onSubmit={sendEmail}
-            className="mt-10 bg-white dark:bg-[#0a192f] p-6 rounded-lg shadow-md flex flex-col gap-4 text-left"
+            className="mt-10 bg-white dark:bg-dark-background p-6 rounded-lg shadow-md flex flex-col gap-4 text-left"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
@@ -100,23 +103,23 @@ const Contact = ({ sectionNumber }: ContactProps) => {
               type="text"
               name="user_name"
               placeholder="Your Name"
-              className="p-3 rounded bg-gray-100 dark:bg-gray-800 text-[#111827] dark:text-[#ccd6f6] focus:outline-none focus:ring-2 focus:ring-[#64ffda]"
+              className="p-3 rounded bg-gray-100 dark:bg-gray-800 text-light-textPrimary dark:text-dark-textPrimary focus:outline-none focus:ring-2 focus:ring-dark-accent"
             />
             <input
               type="email"
               name="user_email"
               placeholder="Your Email"
-              className="p-3 rounded bg-gray-100 dark:bg-gray-800 text-[#111827] dark:text-[#ccd6f6] focus:outline-none focus:ring-2 focus:ring-[#64ffda]"
+              className="p-3 rounded bg-gray-100 dark:bg-gray-800 text-light-textPrimary dark:text-dark-textPrimary focus:outline-none focus:ring-2 focus:ring-dark-accent"
             />
             <textarea
               name="message"
               rows={4}
               placeholder="Your Message"
-              className="p-3 rounded bg-gray-100 dark:bg-gray-800 text-[#111827] dark:text-[#ccd6f6] focus:outline-none focus:ring-2 focus:ring-[#64ffda]"
+              className="p-3 rounded bg-gray-100 dark:bg-gray-800 text-light-textPrimary dark:text-dark-textPrimary focus:outline-none focus:ring-2 focus:ring-dark-accent"
             />
             <button
               type="submit"
-              className="mt-2 px-6 py-2 border border-[#64ffda] text-[#64ffda] rounded hover:bg-[#64ffda]/10 transition"
+              className="mt-2 px-6 py-2 border border-dark-accent text-dark-accent rounded hover:bg-dark-accent/10 transition"
             >
               Send Message
             </button>

@@ -10,21 +10,33 @@ type ExperienceItem = {
   points: string[];
 };
 
-type ExperienceProps = {
-  sectionNumber: number;
-};
-
-const Experience = ({ sectionNumber }: ExperienceProps) => {
+const Experience = () => {
   const [experienceData, setExperienceData] = useState<Record<string, ExperienceItem>>({});
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sectionOrder, setSectionOrder] = useState<number>(3); // fallback
+  const [enabled, setEnabled] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchExperience = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const snap = await getDoc(doc(db, "content", "experience"));
-        if (snap.exists()) {
-          const rawData = snap.data() as Record<string, ExperienceItem>;
+        const [dataSnap, metaSnap] = await Promise.all([
+          getDoc(doc(db, "content", "experience")),
+          getDoc(doc(db, "content/sections", "experience")),
+        ]);
+
+        // Fetch section metadata
+        if (metaSnap.exists()) {
+          const meta = metaSnap.data();
+          setSectionOrder(meta.order ?? 3);
+          setEnabled(meta.enabled ?? true);
+          console.log("⚙️ Experience meta loaded:", meta);
+        }
+
+        // Fetch content
+        if (dataSnap.exists()) {
+          const rawData = dataSnap.data() as Record<string, ExperienceItem>;
 
           const sortedKeys = Object.keys(rawData).sort((a, b) => {
             const numA = parseInt(a.replace(/\D/g, ""), 10);
@@ -45,6 +57,7 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
 
           setExperienceData(filteredSortedData);
           setActiveTab(Object.keys(filteredSortedData)[0] || null);
+
           console.log("✅ Experience data loaded:", filteredSortedData);
         } else {
           console.warn("⚠️ Experience document does not exist.");
@@ -56,7 +69,7 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
       }
     };
 
-    fetchExperience();
+    fetchData();
   }, []);
 
   const tabs = Object.keys(experienceData);
@@ -72,7 +85,8 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
     );
   }
 
-  if (!tabs.length) {
+  if (!tabs.length || !enabled) {
+    console.log("🚫 Experience section hidden or empty");
     return null;
   }
 
@@ -88,7 +102,7 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-            {String(sectionNumber).padStart(2, "0")}.
+            {String(sectionOrder).padStart(2, "0")}.
           </span>
           Where I've Worked
         </h2>

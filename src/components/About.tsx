@@ -10,7 +10,7 @@ type AboutContent = {
 };
 
 type AboutProps = {
-  sectionNumber: number;
+  sectionNumber?: number; // ✅ Numeric from Firestore via App.tsx
 };
 
 const About = ({ sectionNumber }: AboutProps) => {
@@ -18,14 +18,11 @@ const About = ({ sectionNumber }: AboutProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAbout = async () => {
+    const fetchAboutContent = async () => {
       try {
-        const docRef = doc(db, "content", "about");
-        const snap = await getDoc(docRef);
-        if (snap.exists()) {
-          const data = snap.data() as AboutContent;
-          setAboutData(data);
-          console.log("✅ About data loaded:", data);
+        const aboutSnap = await getDoc(doc(db, "content", "about"));
+        if (aboutSnap.exists()) {
+          setAboutData(aboutSnap.data() as AboutContent);
         } else {
           console.warn("⚠️ About document does not exist.");
         }
@@ -35,7 +32,8 @@ const About = ({ sectionNumber }: AboutProps) => {
         setLoading(false);
       }
     };
-    fetchAbout();
+
+    fetchAboutContent();
   }, []);
 
   if (loading) {
@@ -59,8 +57,8 @@ const About = ({ sectionNumber }: AboutProps) => {
   }
 
   const { title, paragraphs, imageUrl } = aboutData;
-
-  const hasHeadingContent = title?.trim() || (paragraphs && paragraphs.length > 0);
+  const hasHeadingContent =
+    title?.trim() || (paragraphs && paragraphs.length > 0);
 
   return (
     <section
@@ -79,8 +77,8 @@ const About = ({ sectionNumber }: AboutProps) => {
           hidden: {},
         }}
       >
-        {/* SECTION HEADING (optional) */}
-        {hasHeadingContent && (
+        {/* SECTION HEADING */}
+        {hasHeadingContent && typeof sectionNumber === "number" && (
           <motion.div
             className="flex items-center mb-8"
             initial={{ opacity: 0, y: 20 }}
@@ -89,11 +87,11 @@ const About = ({ sectionNumber }: AboutProps) => {
           >
             <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
               <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-                {String(sectionNumber).padStart(2, "0")}.
+                0.{sectionNumber}
               </span>
               {title || "About Me"}
             </h2>
-            <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-border relative -top-[0px]" />
+            <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-border" />
           </motion.div>
         )}
 
