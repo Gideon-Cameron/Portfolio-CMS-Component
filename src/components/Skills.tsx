@@ -5,27 +5,19 @@ import { db } from "../lib/firebase";
 
 type SkillGroups = Record<string, string[]>;
 
-const Skills = () => {
+type SkillsProps = {
+  sectionNumber?: number; // same contract as About
+};
+
+const Skills = ({ sectionNumber }: SkillsProps) => {
   const [skillGroups, setSkillGroups] = useState<SkillGroups>({});
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [sectionOrder, setSectionOrder] = useState<number>(4); // default order
-  const [enabled, setEnabled] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSkills = async () => {
       try {
-        const [contentSnap, metaSnap] = await Promise.all([
-          getDoc(doc(db, "content", "skills")),
-          getDoc(doc(db, "content/sections", "skills")),
-        ]);
-
-        if (metaSnap.exists()) {
-          const meta = metaSnap.data();
-          setSectionOrder(meta.order ?? 4);
-          setEnabled(meta.enabled ?? true);
-          console.log("⚙️ Skills meta loaded:", meta);
-        }
+        const contentSnap = await getDoc(doc(db, "content", "skills"));
 
         if (contentSnap.exists()) {
           const data = contentSnap.data() as SkillGroups;
@@ -49,7 +41,7 @@ const Skills = () => {
       }
     };
 
-    fetchData();
+    fetchSkills();
   }, []);
 
   const categories = Object.keys(skillGroups).filter(
@@ -67,37 +59,38 @@ const Skills = () => {
     );
   }
 
-  if (!enabled || !activeTab || categories.length === 0) {
+  if (!activeTab || categories.length === 0) {
     console.log("🚫 Skills section hidden or empty");
     return null;
   }
 
+  const hasHeadingContent = true; // skills always have heading when section is shown
+
   return (
     <section id="skills" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
-      {/* Section Heading */}
-      <motion.div
-        className="flex items-center mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1, duration: 0.6 }}
-        viewport={{ once: true }}
-      >
-        <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-          <span className="mr-2">{String(sectionOrder).padStart(2, "0")}.</span>
-          Skills
-        </h2>
-        <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
-      </motion.div>
+      {/* Section Heading - same behavior as About */}
+      {hasHeadingContent && typeof sectionNumber === "number" && (
+        <motion.div
+          className="flex items-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+            <span className="mr-2">0.{sectionNumber}</span>
+            Skills
+          </h2>
+          <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
+        </motion.div>
+      )}
 
       {/* Tab Buttons */}
       <motion.div
         className="flex flex-wrap gap-4 mb-10"
         initial="hidden"
-        whileInView="visible"
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        variants={{
-          visible: { transition: { staggerChildren: 0.08 } },
-        }}
       >
         {categories.map((category, index) => (
           <motion.button

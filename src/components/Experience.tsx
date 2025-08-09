@@ -10,35 +10,22 @@ type ExperienceItem = {
   points: string[];
 };
 
-const Experience = () => {
+type ExperienceProps = {
+  sectionNumber?: number; // matches About behavior
+};
+
+const Experience = ({ sectionNumber }: ExperienceProps) => {
   const [experienceData, setExperienceData] = useState<Record<string, ExperienceItem>>({});
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Updated: store displayNumber as string
-  const [sectionNumber, setSectionNumber] = useState<string>("");
-  const [enabled, setEnabled] = useState<boolean>(true);
-
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchExperience = async () => {
       setLoading(true);
       try {
-        const [dataSnap, metaSnap] = await Promise.all([
-          getDoc(doc(db, "content", "experience")),
-          getDoc(doc(db, "sections", "experience")), // ✅ fixed collection path
-        ]);
-
-        // ✅ Fetch section metadata with displayNumber
-        if (metaSnap.exists()) {
-          const meta = metaSnap.data();
-          setSectionNumber(meta.displayNumber ?? ""); // ✅ use displayNumber instead of order
-          setEnabled(meta.enabled ?? true);
-          console.log("⚙️ Experience meta loaded:", meta);
-        }
-
-        // Fetch content
-        if (dataSnap.exists()) {
-          const rawData = dataSnap.data() as Record<string, ExperienceItem>;
+        const snap = await getDoc(doc(db, "content", "experience"));
+        if (snap.exists()) {
+          const rawData = snap.data() as Record<string, ExperienceItem>;
 
           const sortedKeys = Object.keys(rawData).sort((a, b) => {
             const numA = parseInt(a.replace(/\D/g, ""), 10);
@@ -59,7 +46,6 @@ const Experience = () => {
 
           setExperienceData(filteredSortedData);
           setActiveTab(Object.keys(filteredSortedData)[0] || null);
-
           console.log("✅ Experience data loaded:", filteredSortedData);
         } else {
           console.warn("⚠️ Experience document does not exist.");
@@ -71,10 +57,11 @@ const Experience = () => {
       }
     };
 
-    fetchData();
+    fetchExperience();
   }, []);
 
   const tabs = Object.keys(experienceData);
+  const hasHeadingContent = tabs.length > 0;
 
   if (loading) {
     return (
@@ -87,29 +74,28 @@ const Experience = () => {
     );
   }
 
-  if (!tabs.length || !enabled) {
-    console.log("🚫 Experience section hidden or empty");
-    return null;
-  }
+  if (!tabs.length) return null;
 
   return (
     <section id="experience" className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24">
-      {/* Section Heading */}
-      <motion.div
-        className="flex items-center mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        viewport={{ once: true }}
-      >
-        <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-            {sectionNumber?.toString().padStart(2, "0")}
-          </span>
-          Where I've Worked
-        </h2>
-        <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
-      </motion.div>
+      {/* Section Heading - same behavior as About */}
+      {hasHeadingContent && typeof sectionNumber === "number" && (
+        <motion.div
+          className="flex items-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+              0.{sectionNumber}
+            </span>
+            Where I've Worked
+          </h2>
+          <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
+        </motion.div>
+      )}
 
       {/* Layout */}
       <motion.div
@@ -126,18 +112,10 @@ const Experience = () => {
         }}
       >
         {/* Tabs */}
-        <motion.div
-          className="md:w-1/4 border-l border-dark-textSecondary"
-          variants={{ hidden: {}, visible: {} }}
-        >
+        <motion.div className="md:w-1/4 border-l border-dark-textSecondary" variants={{ hidden: {}, visible: {} }}>
           <ul className="flex md:flex-col text-sm font-mono">
             {tabs.map((tab, i) => (
-              <motion.li
-                key={tab}
-                initial={{ opacity: 0, x: -15 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 + 0.2 }}
-              >
+              <motion.li key={tab} initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 + 0.2 }}>
                 <button
                   className={`w-full text-left px-4 py-3 transition-colors duration-200 ${
                     activeTab === tab
@@ -167,9 +145,7 @@ const Experience = () => {
               <h3 className="text-xl font-semibold text-light-textPrimary dark:text-dark-textPrimary">
                 {experienceData[activeTab].title}{" "}
                 {experienceData[activeTab].context?.trim() && (
-                  <span className="text-light-accent dark:text-dark-accent">
-                    @ {experienceData[activeTab].context}
-                  </span>
+                  <span className="text-light-accent dark:text-dark-accent">@ {experienceData[activeTab].context}</span>
                 )}
               </h3>
             )}
@@ -184,13 +160,7 @@ const Experience = () => {
               {experienceData[activeTab].points
                 .filter((point) => point.trim() !== "")
                 .map((point, i) => (
-                  <motion.li
-                    key={i}
-                    className="leading-relaxed"
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                  >
+                  <motion.li key={i} className="leading-relaxed" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }}>
                     {point}
                   </motion.li>
                 ))}
