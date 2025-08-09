@@ -79,21 +79,23 @@ const Projects = () => {
   return (
     <section id="projects" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
       {/* Section Heading */}
-      <motion.div
-        className="flex items-center mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-      >
-        <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-          <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-            {String(sectionOrder).padStart(2, "0")}.
-          </span>
-          Projects
-        </h2>
-        <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
-      </motion.div>
+{typeof sectionOrder === "number" && (
+  <motion.div
+    className="flex items-center mb-12"
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    viewport={{ once: true }}
+  >
+    <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+      <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+        0.{sectionOrder}
+      </span>
+      Projects
+    </h2>
+    <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
+  </motion.div>
+)}
 
       {/* Grid */}
       <motion.div
