@@ -1,16 +1,43 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { motion, AnimatePresence } from "framer-motion";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
-type ContactProps = {
-  sectionNumber: number;
-};
-
-const Contact = ({ sectionNumber }: ContactProps) => {
+const Contact = () => {
   const form = useRef<HTMLFormElement>(null);
+
   const [messageSent, setMessageSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+
+  const [enabled, setEnabled] = useState(true);
+  const [sectionNumber, setSectionNumber] = useState<number>(6);
+  const [description, setDescription] = useState(
+    "I’m currently looking for full-time frontend opportunities. If you’re interested in working together or just want to connect, feel free to reach out. I’ll respond as soon as I can!"
+  );
+
+  // Load settings from Firestore
+  useEffect(() => {
+    const fetchContactSettings = async () => {
+      try {
+        const snap = await getDoc(doc(db, "sections", "contact"));
+        if (snap.exists()) {
+          const data = snap.data();
+          setEnabled(data.enabled ?? true);
+          setSectionNumber(data.displayNumber ?? 6);
+          setDescription(
+            data.description ??
+              "I’m currently looking for full-time frontend opportunities. If you’re interested in working together or just want to connect, feel free to reach out. I’ll respond as soon as I can!"
+          );
+        }
+      } catch (err) {
+        console.error("❌ Failed to load contact section settings", err);
+      }
+    };
+
+    fetchContactSettings();
+  }, []);
 
   const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,6 +66,8 @@ const Contact = ({ sectionNumber }: ContactProps) => {
         }
       );
   };
+
+  if (!enabled) return null;
 
   return (
     <section
@@ -70,8 +99,7 @@ const Contact = ({ sectionNumber }: ContactProps) => {
         transition={{ delay: 0.2, duration: 0.6 }}
         viewport={{ once: true }}
       >
-        I’m currently looking for full-time frontend opportunities. If you’re interested in working
-        together or just want to connect, feel free to reach out. I’ll respond as soon as I can!
+        {description}
       </motion.p>
 
       {!showForm && (

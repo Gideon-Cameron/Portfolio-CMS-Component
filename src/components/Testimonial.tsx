@@ -15,20 +15,22 @@ const Testimonial = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [enabled, setEnabled] = useState(true);
-  const [sectionOrder, setSectionOrder] = useState(6); // fallback
+  const [displayNumber, setDisplayNumber] = useState(6); // fallback
 
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
         const [snap, metaSnap] = await Promise.all([
           getDoc(doc(db, "content", "testimonials")),
-          getDoc(doc(db, "content/sections", "testimonials")),
+          getDoc(doc(db, "sections", "testimonials")), // ✅ fixed path
         ]);
 
         if (metaSnap.exists()) {
           const meta = metaSnap.data();
           setEnabled(meta.enabled ?? true);
-          setSectionOrder(meta.order ?? 6);
+          setDisplayNumber(
+            typeof meta.displayNumber === "number" ? meta.displayNumber : 6
+          );
           console.log("⚙️ Testimonials section meta loaded:", meta);
         }
 
@@ -84,7 +86,7 @@ const Testimonial = () => {
       >
         <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
           <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-            {String(sectionOrder).padStart(2, "0")}.
+            {String(displayNumber).padStart(2, "0")}.
           </span>
           Testimonials
         </h2>
