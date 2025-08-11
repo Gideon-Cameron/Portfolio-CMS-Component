@@ -87,8 +87,8 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
           transition={{ duration: 0.6, delay: 0.1 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+          <h2 className="text-2xl font-bold text-chocolate dark:text-dark-accent font-mono whitespace-nowrap">
+            <span className="mr-2 font-mono text-accent dark:text-dark-accent">
               0.{sectionNumber}
             </span>
             Where I've Worked
