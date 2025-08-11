@@ -38,7 +38,7 @@ const Hero = () => {
 
   if (loading || !content) {
     return (
-      <section className="min-h-screen flex items-center justify-center text-dark-textSecondary font-mono">
+      <section className="min-h-screen flex items-center justify-center text-dark-text-secondary font-mono">
         Loading hero content...
       </section>
     );
@@ -47,7 +47,7 @@ const Hero = () => {
   const { intro, name, subtitle, description } = content;
 
   return (
-    <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 max-w-4xl mx-auto">
+    <section className="min-h-screen flex flex-col justify-center px-6 md:px-12 max-w-4xl mx-auto bg-background">
       <motion.p
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35, duration: 0.6 }}
-        className="text-5xl sm:text-6xl md:text-7xl font-bold text-light-textPrimary dark:text-dark-textPrimary mb-2 leading-tight"
+        className="text-5xl sm:text-6xl md:text-7xl font-allura text-light-text-primary dark:text-dark-text-primary mb-2 leading-tight"
       >
         {name}
       </motion.h1>
@@ -70,7 +70,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.6 }}
-        className="text-4xl sm:text-5xl md:text-6xl font-semibold text-light-textSecondary dark:text-dark-textSecondary mb-6 leading-tight"
+        className="text-4xl sm:text-5xl md:text-6xl font-tangerine text-light-text-secondary dark:text-dark-text-secondary mb-6 leading-tight"
       >
         {subtitle}
       </motion.h2>
@@ -79,7 +79,7 @@ const Hero = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.65, duration: 0.6 }}
-        className="text-base sm:text-lg md:text-xl leading-relaxed text-light-textPrimary dark:text-dark-textSecondary max-w-2xl"
+        className="text-base sm:text-lg md:text-xl leading-relaxed text-light-text-primary dark:text-dark-text-primary max-w-2xl font-opensans"
       >
         {description}
       </motion.p>

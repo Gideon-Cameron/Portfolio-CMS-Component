@@ -49,11 +49,11 @@ const App = () => {
   }, []);
 
   return (
-    <div className="bg-light-background text-light-textPrimary dark:bg-dark-background dark:text-dark-textPrimary transition-colors duration-300 font-sans">
+    <div className="text-light-textPrimary dark:text-dark-textPrimary transition-colors duration-300 font-sans">
       <LeftSidebar />
       <Navbar />
 
-      <main className="pt-10 space-y-22 px-6 nav:pl-20 md:px-12">
+      <main className="pt-10 space-y-22">
         {/* Hero always at the top */}
         <section id="hero">
           <Hero />

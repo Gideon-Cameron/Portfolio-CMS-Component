@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Allura&family=Tangerine&family=Italianno&family=Open+Sans:wght@400;700&family=Inter:wght@400;700&family=Fira+Code:wght@400;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Tangerine&family=Italianno&family=Open+Sans:wght@400;700&family=Inter:wght@400;700&family=Fira+Code:wght@400;700&family=Playpen+Sans:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,5 +9,5 @@ html {
 }
 
 body {
-  @apply bg-light-background text-light-textPrimary dark:bg-dark-background dark:text-dark-textPrimary transition-colors duration-300;
+  @apply bg-light-background text-light-text-primary dark:bg-dark-background dark:text-dark-text-primary transition-colors duration-300;
 }
