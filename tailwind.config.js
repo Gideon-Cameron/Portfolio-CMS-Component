@@ -33,7 +33,7 @@ export default {
         secondary: "#C4C4C4",
         accent: "#D7355D",            // Hero name / subtitle
         cream: "#F9F3F1",
-        'cream-highlight': "#EFE7E3",
+        creamhighlight: "#EFE7E3",
 
         /* Experience Section Colors */
         'experience-bg': "#9FB4B7",

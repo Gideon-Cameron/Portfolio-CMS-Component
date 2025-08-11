@@ -119,8 +119,8 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
                 <button
                   className={`w-full text-left px-4 py-3 transition-colors duration-200 ${
                     activeTab === tab
-                      ? "border-l-2 border-dark-accent text-dark-accent dark:text-dark-accent bg-dark-accent/5"
-                      : "text-light-textSecondary dark:text-dark-textSecondary hover:bg-dark-accent/5 hover:text-dark-accent"
+                      ? "border-l-2 border-accent text-accent bg-creamhighlight dark:text-dark-accent bg-dark-accent/5"
+                      : "text-experience-text dark:text-dark-textSecondary hover:bg-creamhighlight hover:text-accent"
                   }`}
                   onClick={() => setActiveTab(tab)}
                 >
