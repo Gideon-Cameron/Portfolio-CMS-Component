@@ -85,8 +85,8 @@ const About = ({ sectionNumber }: AboutProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.6 }}
           >
-            <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-              <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+            <h2 className="text-2xl font-bold text-chocolate dark:text-dark-accent font-playpen whitespace-nowrap">
+              <span className="mr-2 font-playpen text-accent dark:text-dark-accent">
                 0.{sectionNumber}
               </span>
               {title || "About Me"}
@@ -119,19 +119,19 @@ const About = ({ sectionNumber }: AboutProps) => {
         transition={{ delay: 0.7, duration: 0.6 }}
         viewport={{ once: true }}
       >
-        <div className="relative group w-64 h-64 rounded-md overflow-hidden shadow-lg">
+        <div className="relative flex items-center justify-center w-[280px] h-[280px] rounded-md overflow-hidden shadow-lg">
           {imageUrl?.trim() ? (
             <img
               src={imageUrl}
               alt="Profile image"
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition duration-500 rounded"
+              className="w-full h-full object-cover rounded"
             />
           ) : (
             <div className="w-full h-full bg-dark-background-alt flex items-center justify-center text-dark-accent text-sm">
               No image uploaded
             </div>
           )}
-          <div className="absolute inset-0 border-2 border-dark-accent rounded pointer-events-none" />
+          <div className="absolute inset-0 border-2 border-chocolate rounded pointer-events-none" />
         </div>
       </motion.div>
     </section>
