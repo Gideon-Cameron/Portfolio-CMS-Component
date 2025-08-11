@@ -98,9 +98,13 @@ const App = () => {
         <section id="contact">
           <Contact />
         </section>
-      </main>
 
-      <Footer />
+        {/* Footer */}
+
+        <section id="footer">
+          <Footer />
+        </section>
+      </main>
     </div>
   );
 };
