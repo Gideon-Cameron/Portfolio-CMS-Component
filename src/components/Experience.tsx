@@ -11,7 +11,7 @@ type ExperienceItem = {
 };
 
 type ExperienceProps = {
-  sectionNumber?: number; // matches About behavior
+  sectionNumber?: number;
 };
 
 const Experience = ({ sectionNumber }: ExperienceProps) => {
@@ -46,7 +46,6 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
 
           setExperienceData(filteredSortedData);
           setActiveTab(Object.keys(filteredSortedData)[0] || null);
-          console.log("✅ Experience data loaded:", filteredSortedData);
         } else {
           console.warn("⚠️ Experience document does not exist.");
         }
@@ -67,7 +66,7 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
     return (
       <section
         id="experience"
-        className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary"
+        className="bg-background w-full max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-experienceText"
       >
         Loading experience...
       </section>
@@ -77,97 +76,115 @@ const Experience = ({ sectionNumber }: ExperienceProps) => {
   if (!tabs.length) return null;
 
   return (
-    <section id="experience" className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24">
-      {/* Section Heading - same behavior as About */}
-      {hasHeadingContent && typeof sectionNumber === "number" && (
-        <motion.div
-          className="flex items-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-2xl font-bold text-chocolate dark:text-dark-accent font-mono whitespace-nowrap">
-            <span className="mr-2 font-mono text-accent dark:text-dark-accent">
-              0.{sectionNumber}
-            </span>
-            Where I've Worked
-          </h2>
-          <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
-        </motion.div>
-      )}
-
-      {/* Layout */}
-      <motion.div
-        className="flex flex-col md:flex-row gap-8"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={{
-          visible: {
-            transition: {
-              staggerChildren: 0.15,
-            },
-          },
-        }}
-      >
-        {/* Tabs */}
-        <motion.div className="md:w-1/4 border-l border-dark-textSecondary" variants={{ hidden: {}, visible: {} }}>
-          <ul className="flex md:flex-col text-sm font-mono">
-            {tabs.map((tab, i) => (
-              <motion.li key={tab} initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 + 0.2 }}>
-                <button
-                  className={`w-full text-left px-4 py-3 transition-colors duration-200 ${
-                    activeTab === tab
-                      ? "border-l-2 border-accent text-accent bg-creamhighlight dark:text-dark-accent bg-dark-accent/5"
-                      : "text-experience-text dark:text-dark-textSecondary hover:bg-creamhighlight hover:text-accent"
-                  }`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {experienceData[tab].title?.trim() || "Untitled"}
-                </button>
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
-
-        {/* Content */}
-        {activeTab && (
+    <section id="experience" className="bg-background w-full">
+      <div className="max-w-5xl mx-auto px-6 md:px-12 py-20 md:py-24">
+        {/* Section Heading */}
+        {hasHeadingContent && typeof sectionNumber === "number" && (
           <motion.div
-            className="md:w-3/4"
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.5 }}
+            className="flex items-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
           >
-            {experienceData[activeTab].title?.trim() && (
-              <h3 className="text-xl font-semibold text-light-textPrimary dark:text-dark-textPrimary">
-                {experienceData[activeTab].title}{" "}
-                {experienceData[activeTab].context?.trim() && (
-                  <span className="text-light-accent dark:text-dark-accent">@ {experienceData[activeTab].context}</span>
-                )}
-              </h3>
-            )}
-
-            {experienceData[activeTab].date?.trim() && (
-              <p className="text-sm font-mono text-light-textSecondary dark:text-dark-textSecondary mb-4">
-                {experienceData[activeTab].date}
-              </p>
-            )}
-
-            <ul className="list-disc ml-5 space-y-2 text-light-textSecondary dark:text-dark-textSecondary">
-              {experienceData[activeTab].points
-                .filter((point) => point.trim() !== "")
-                .map((point, i) => (
-                  <motion.li key={i} className="leading-relaxed" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }}>
-                    {point}
-                  </motion.li>
-                ))}
-            </ul>
+            <h2 className="text-2xl font-bold text-experienceText font-playpen whitespace-nowrap">
+              <span className="mr-2 font-playpen text-accent">
+                0{sectionNumber}.
+              </span>
+              Where I've Worked
+            </h2>
+            <div className="h-px ml-5 flex-1 max-w-[300px] bg-experienceText relative -top-[5px]" />
           </motion.div>
         )}
-      </motion.div>
+
+        {/* Layout */}
+        <motion.div
+          className="flex flex-col md:flex-row gap-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.15,
+              },
+            },
+          }}
+        >
+          {/* Tabs */}
+          <motion.div
+            className="md:w-1/4 border-l border-experienceText"
+            variants={{ hidden: {}, visible: {} }}
+          >
+            <ul className="flex md:flex-col text-sm font-mono">
+              {tabs.map((tab, i) => (
+                <motion.li
+                  key={tab}
+                  initial={{ opacity: 0, x: -15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 + 0.2 }}
+                >
+                  <button
+                    className={`w-full text-left px-4 py-3 transition-colors duration-200 ${
+                      activeTab === tab
+                        ? "border-l-2 border-accent text-accent bg-creamHighlight"
+                        : "text-experienceText hover:bg-creamHighlight hover:text-accent"
+                    }`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {experienceData[tab].title?.trim() || "Untitled"}
+                  </button>
+                </motion.li>
+              ))}
+            </ul>
+          </motion.div>
+
+          {/* Content */}
+          {activeTab && (
+            <motion.div
+              className="md:w-3/4"
+              key={activeTab}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.5 }}
+            >
+              {experienceData[activeTab].title?.trim() && (
+                <h3 className="text-xl font-semibold text-experienceText">
+                  {experienceData[activeTab].title}{" "}
+                  {experienceData[activeTab].context?.trim() && (
+                    <span className="text-accent">
+                      @ {experienceData[activeTab].context}
+                    </span>
+                  )}
+                </h3>
+              )}
+
+              {experienceData[activeTab].date?.trim() && (
+                <p className="text-sm font-mono text-experienceText mb-4">
+                  {experienceData[activeTab].date}
+                </p>
+              )}
+
+              <ul className="list-disc ml-5 space-y-2 text-experienceText mt-4">
+                {experienceData[activeTab].points
+                  .filter((point) => point.trim() !== "")
+                  .map((point, i) => (
+                    <motion.li
+                      key={i}
+                      className="leading-relaxed"
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                    >
+                      {point}
+                    </motion.li>
+                  ))}
+              </ul>
+            </motion.div>
+          )}
+        </motion.div>
+      </div>
     </section>
   );
 };
