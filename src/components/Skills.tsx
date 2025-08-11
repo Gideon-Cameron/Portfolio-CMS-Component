@@ -60,7 +60,7 @@ const Skills = ({ sectionNumber }: SkillsProps) => {
   }
 
   if (!activeTab || categories.length === 0) {
-    console.log("🚫 Skills section hidden or empty");
+    console.log("🚫 Skills section hidden or empty.");
     return null;
   }
 
