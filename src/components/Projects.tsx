@@ -22,12 +22,16 @@ type ProjectsMeta = {
   enabled?: boolean;
 };
 
-const Projects = () => {
+type ProjectsProps = {
+  sectionNumber?: number; // 👈 added
+};
+
+const Projects = ({ sectionNumber }: ProjectsProps) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selected, setSelected] = useState<Project | null>(null);
   const [showCount, setShowCount] = useState(3);
   const [loading, setLoading] = useState(true);
-  const [sectionOrder, setSectionOrder] = useState<number>(5);
+  const [sectionOrder, setSectionOrder] = useState<number>(sectionNumber ?? 5); // 👈 use passed value if available
   const [enabled, setEnabled] = useState(true);
 
   const handleClose = () => setSelected(null);
@@ -46,7 +50,10 @@ const Projects = () => {
         const metaSnap = await getDoc(doc(db, "content/sections", "projects"));
         if (metaSnap.exists()) {
           const meta = metaSnap.data() as ProjectsMeta;
-          setSectionOrder(meta.order ?? 5);
+          // only overwrite sectionOrder if sectionNumber not passed
+          if (sectionNumber === undefined) {
+            setSectionOrder(meta.order ?? 5);
+          }
           setEnabled(meta.enabled ?? true);
         }
       } catch (err) {
@@ -57,7 +64,7 @@ const Projects = () => {
     };
 
     fetchProjects();
-  }, []);
+  }, [sectionNumber]);
 
   if (loading) {
     return (

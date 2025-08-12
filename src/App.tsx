@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./lib/firebase";
 
 import Navbar from "./components/Navbar";
 import LeftSidebar from "./components/LeftSidebar";
-import Hero from "./components/Hero";
-import About from "./components/About";
-import Experience from "./components/Experience";
-import Skills from "./components/Skills";
-import Projects from "./components/Projects";
-import Testimonial from "./components/Testimonial";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
+import Hero from "./components/Hero"; // Load immediately
+
+// Lazy-loaded sections
+const About = lazy(() => import("./components/About"));
+const Experience = lazy(() => import("./components/Experience"));
+const Skills = lazy(() => import("./components/Skills"));
+const Projects = lazy(() => import("./components/Projects"));
+const Testimonial = lazy(() => import("./components/Testimonial"));
+const Contact = lazy(() => import("./components/Contact"));
+const Footer = lazy(() => import("./components/Footer"));
 
 type SectionMeta = {
-  displayNumber: number; // ✅ Numeric only
+  displayNumber: number;
   enabled: boolean;
 };
 
@@ -54,56 +56,51 @@ const App = () => {
       <Navbar />
 
       <main className="pt-10 space-y-22">
-        {/* Hero always at the top */}
+        {/* Hero loads immediately */}
         <section id="hero">
           <Hero />
         </section>
 
-        {/* About */}
-        {!loading && sectionsMeta.about?.enabled && (
-          <section id="about">
-            <About sectionNumber={sectionsMeta.about.displayNumber} />
+        {/* Lazy load the rest */}
+        <Suspense fallback={<div className="text-center py-10">Loading section...</div>}>
+          {!loading && sectionsMeta.about?.enabled && (
+            <section id="about">
+              <About sectionNumber={sectionsMeta.about.displayNumber} />
+            </section>
+          )}
+
+          {!loading && sectionsMeta.experience?.enabled && (
+            <section id="experience">
+              <Experience sectionNumber={sectionsMeta.experience.displayNumber} />
+            </section>
+          )}
+
+          {!loading && sectionsMeta.skills?.enabled && (
+            <section id="skills">
+              <Skills sectionNumber={sectionsMeta.skills.displayNumber} />
+            </section>
+          )}
+
+          {!loading && sectionsMeta.projects?.enabled && (
+            <section id="projects">
+              <Projects sectionNumber={sectionsMeta.projects.displayNumber} />
+            </section>
+          )}
+
+          {!loading && sectionsMeta.testimonials?.enabled && (
+            <section id="testimonials">
+              <Testimonial sectionNumber={sectionsMeta.testimonials.displayNumber} />
+            </section>
+          )}
+
+          <section id="contact">
+            <Contact />
           </section>
-        )}
 
-        {/* Experience */}
-        {!loading && sectionsMeta.experience?.enabled && (
-          <section id="experience">
-            <Experience sectionNumber={sectionsMeta.experience.displayNumber} />
+          <section id="footer">
+            <Footer />
           </section>
-        )}
-
-        {/* Skills */}
-        {!loading && sectionsMeta.skills?.enabled && (
-          <section id="skills">
-            <Skills sectionNumber={sectionsMeta.skills.displayNumber} />
-          </section>
-        )}
-
-        {/* Projects */}
-        {!loading && sectionsMeta.projects?.enabled && (
-          <section id="projects">
-            <Projects sectionNumber={sectionsMeta.projects.displayNumber} />
-          </section>
-        )}
-
-        {/* Testimonials */}
-        {!loading && sectionsMeta.testimonials?.enabled && (
-          <section id="testimonials">
-            <Testimonial sectionNumber={sectionsMeta.testimonials.displayNumber} />
-          </section>
-        )}
-
-        {/* Contact */}
-        <section id="contact">
-          <Contact />
-        </section>
-
-        {/* Footer */}
-
-        <section id="footer">
-          <Footer />
-        </section>
+        </Suspense>
       </main>
     </div>
   );
