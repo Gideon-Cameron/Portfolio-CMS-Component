@@ -2,6 +2,62 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class", // keeps dark/light toggle
+  safelist: [
+    // Light mode text
+    'text-light-background',
+    'text-light-text-primary',
+    'text-light-text-secondary',
+    'text-light-accent',
+    'text-light-border',
+
+    // Dark mode text
+    'dark:text-dark-background',
+    'dark:text-dark-text-primary',
+    'dark:text-dark-text-secondary',
+    'dark:text-dark-accent',
+    'dark:text-dark-border',
+
+    // Brand colors
+    'text-background',
+    'text-soft',
+    'text-surface',
+    'text-chocolate',
+    'text-button',
+    'text-richblack',
+    'text-primary',
+    'text-secondary',
+    'text-accent',
+    'text-cream',
+    'text-creamhighlight',
+
+    // Experience section colors
+    'text-experience-bg',
+    'text-experience-text',
+    'text-experience-card',
+
+    // Background colors
+    'bg-light-background',
+    'bg-dark-background',
+    'bg-background',
+    'bg-soft',
+    'bg-surface',
+    'bg-chocolate',
+    'bg-button',
+    'bg-richblack',
+    'bg-primary',
+    'bg-secondary',
+    'bg-accent',
+    'bg-cream',
+    'bg-creamhighlight',
+    'bg-experience-bg',
+    'bg-experience-card',
+
+    // Border colors
+    'border-light-border',
+    'border-dark-border',
+    'border-chocolate',
+    'border-accent',
+  ],
   theme: {
     extend: {
       screens: {
