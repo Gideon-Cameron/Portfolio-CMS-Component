@@ -35,7 +35,6 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        // ✅ Fetch main projects content
         const projectSnap = await getDoc(doc(db, "content", "projects"));
         if (projectSnap.exists()) {
           const data = projectSnap.data() as ProjectsContent;
@@ -44,7 +43,6 @@ const Projects = () => {
           console.warn("⚠️ Projects document does not exist.");
         }
 
-        // ✅ Fetch meta info for ordering and enable toggle
         const metaSnap = await getDoc(doc(db, "content/sections", "projects"));
         if (metaSnap.exists()) {
           const meta = metaSnap.data() as ProjectsMeta;
@@ -65,7 +63,7 @@ const Projects = () => {
     return (
       <section
         id="projects"
-        className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center dark:text-dark-textSecondary"
+        className="bg-[#f3ebe8] w-full max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24 text-center text-experienceText"
       >
         Loading projects...
       </section>
@@ -81,161 +79,167 @@ const Projects = () => {
   }
 
   return (
-    <section id="projects" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
-      {/* Section Heading */}
-      {typeof sectionOrder === "number" && (
-        <motion.div
-          className="flex items-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-              0.{sectionOrder}
-            </span>
-            Projects
-          </h2>
-          <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
-        </motion.div>
-      )}
-
-      {/* Grid */}
-      <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-      >
-        {projects.slice(0, showCount).map((project, index) => (
+    <section id="projects" className="bg-[#f3ebe8] w-full">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
+        {/* Section Heading */}
+        {typeof sectionOrder === "number" && (
           <motion.div
-            key={project.id || `${project.title}-${index}`}
-            className="bg-white dark:bg-dark-background border border-dark-accent/30 rounded shadow-sm transition hover:ring-2 hover:ring-dark-accent/30 hover:shadow-md"
+            className="flex items-center mb-12"
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true }}
           >
-            <div className="bg-light-background-alt dark:bg-dark-background-alt p-[15px] rounded-t overflow-hidden">
-              <div className="w-full aspect-video relative">
-                {project.imageUrl && (
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="absolute inset-0 w-full h-full object-cover rounded"
-                  />
-                )}
-              </div>
-            </div>
-            <div className="p-4 flex flex-col items-start gap-2">
-              <h3 className="text-lg font-semibold text-light-textPrimary dark:text-dark-textPrimary">
-                {project.title}
-              </h3>
-              <p className="text-sm text-light-textSecondary dark:text-dark-textSecondary italic">
-                {project.shortDescription}
-              </p>
-              <button
-                onClick={() => setSelected(project)}
-                className="text-sm text-light-accent dark:text-dark-accent hover:opacity-80 cursor-pointer transition"
-              >
-                View Details
-              </button>
-            </div>
+            <h2 className="text-2xl font-bold text-experienceText font-playpen whitespace-nowrap">
+              <span className="mr-2 font-playpen text-accent">
+                0{sectionOrder}.
+              </span>
+              Projects
+            </h2>
+            <div className="h-px ml-5 flex-1 max-w-[300px] bg-experienceText relative -top-[5px]" />
           </motion.div>
-        ))}
-      </motion.div>
+        )}
 
-      {/* Toggle Button */}
-      {projects.length > 3 && (
+        {/* Grid */}
         <motion.div
-          className="mt-12 flex justify-center"
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
+          variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
         >
-          <button
-            onClick={() => setShowCount(showCount === 3 ? projects.length : 3)}
-            className="px-6 py-2 border border-dark-accent text-dark-accent rounded hover:bg-dark-accent/10 transition cursor-pointer"
-          >
-            {showCount === 3 ? "View More" : "Show Less"}
-          </button>
-        </motion.div>
-      )}
-
-      {/* Modal */}
-      {selected && (
-        <motion.div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-center items-center px-4"
-          onClick={handleClose}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <motion.div
-            className="bg-white dark:bg-dark-background rounded-lg p-6 max-w-4xl w-full shadow-xl relative flex flex-col md:flex-row gap-6"
-            onClick={(e) => e.stopPropagation()}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="md:w-[45%] bg-light-background-alt dark:bg-dark-background-alt rounded">
-              <div className="p-[5px]">
-                {selected.imageUrl && (
-                  <img
-                    src={selected.imageUrl}
-                    alt={selected.title}
-                    className="w-full h-auto object-cover rounded"
-                  />
-                )}
+          {projects.slice(0, showCount).map((project, index) => (
+            <motion.div
+              key={project.id || `${project.title}-${index}`}
+              className="bg-white dark:bg-dark-background border border-dark-accent/30 rounded shadow-sm transition hover:ring-2 hover:ring-dark-accent/30 hover:shadow-md"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="bg-light-background-alt dark:bg-dark-background-alt p-[15px] rounded-t overflow-hidden">
+                <div className="w-full aspect-video relative">
+                  {project.imageUrl && (
+                    <img
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className="absolute inset-0 w-full h-full object-cover rounded"
+                    />
+                  )}
+                </div>
               </div>
-            </div>
-
-            <div className="flex-1 text-light-textPrimary dark:text-dark-textPrimary">
-              <h3 className="text-2xl font-semibold mb-4">{selected.title}</h3>
-              <p className="mb-6 whitespace-pre-line text-light-textSecondary dark:text-dark-textSecondary">
-                {selected.description}
-              </p>
-
-              {selected.skills && (
-                <div className="mt-6">
-                  <h4 className="text-sm font-semibold mb-2 text-dark-accent">Skills</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {selected.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="text-xs px-3 py-1 rounded-full bg-dark-background-alt text-dark-accent border border-dark-accent/30"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {selected.liveUrl?.trim() && (
-                <div className="mt-6">
-                  <a
-                    href={selected.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-2 border border-dark-accent text-dark-accent hover:bg-dark-accent/10 rounded transition cursor-pointer"
-                  >
-                    Live Preview
-                  </a>
-                </div>
-              )}
-
-              <button
-                onClick={handleClose}
-                className="absolute top-3 right-4 text-xl text-dark-accent hover:opacity-75 cursor-pointer"
-              >
-                &times;
-              </button>
-            </div>
-          </motion.div>
+              <div className="p-4 flex flex-col items-start gap-2">
+                <h3 className="text-lg font-semibold text-light-textPrimary dark:text-dark-textPrimary">
+                  {project.title}
+                </h3>
+                <p className="text-sm text-light-textSecondary dark:text-dark-textSecondary italic">
+                  {project.shortDescription}
+                </p>
+                <button
+                  onClick={() => setSelected(project)}
+                  className="text-sm text-light-accent dark:text-dark-accent hover:opacity-80 cursor-pointer transition"
+                >
+                  View Details
+                </button>
+              </div>
+            </motion.div>
+          ))}
         </motion.div>
-      )}
+
+        {/* Toggle Button */}
+        {projects.length > 3 && (
+          <motion.div
+            className="mt-12 flex justify-center"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <button
+              onClick={() =>
+                setShowCount(showCount === 3 ? projects.length : 3)
+              }
+              className="px-6 py-2 border border-dark-accent text-dark-accent rounded hover:bg-dark-accent/10 transition cursor-pointer"
+            >
+              {showCount === 3 ? "View More" : "Show Less"}
+            </button>
+          </motion.div>
+        )}
+
+        {/* Modal */}
+        {selected && (
+          <motion.div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex justify-center items-center px-4"
+            onClick={handleClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <motion.div
+              className="bg-white dark:bg-dark-background rounded-lg p-6 max-w-4xl w-full shadow-xl relative flex flex-col md:flex-row gap-6"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="md:w-[45%] bg-light-background-alt dark:bg-dark-background-alt rounded">
+                <div className="p-[5px]">
+                  {selected.imageUrl && (
+                    <img
+                      src={selected.imageUrl}
+                      alt={selected.title}
+                      className="w-full h-auto object-cover rounded"
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div className="flex-1 text-light-textPrimary dark:text-dark-textPrimary">
+                <h3 className="text-2xl font-semibold mb-4">{selected.title}</h3>
+                <p className="mb-6 whitespace-pre-line text-light-textSecondary dark:text-dark-textSecondary">
+                  {selected.description}
+                </p>
+
+                {selected.skills && (
+                  <div className="mt-6">
+                    <h4 className="text-sm font-semibold mb-2 text-dark-accent">
+                      Skills
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selected.skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="text-xs px-3 py-1 rounded-full bg-dark-background-alt text-dark-accent border border-dark-accent/30"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {selected.liveUrl?.trim() && (
+                  <div className="mt-6">
+                    <a
+                      href={selected.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 border border-dark-accent text-dark-accent hover:bg-dark-accent/10 rounded transition cursor-pointer"
+                    >
+                      Live Preview
+                    </a>
+                  </div>
+                )}
+
+                <button
+                  onClick={handleClose}
+                  className="absolute top-3 right-4 text-xl text-dark-accent hover:opacity-75 cursor-pointer"
+                >
+                  &times;
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </div>
     </section>
   );
 };
