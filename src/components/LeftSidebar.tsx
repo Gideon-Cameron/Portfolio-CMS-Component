@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   FaGithub,
@@ -23,7 +23,7 @@ type SocialLink = {
   url: string;
 };
 
-function getIconForUrl(url: string): JSX.Element | null {
+function getIconForUrl(url: string): React.ReactElement | null {
   if (url.includes("linkedin.com")) return <FaLinkedin className="w-5 h-5" />;
   if (url.includes("github.com")) return <FaGithub className="w-5 h-5" />;
   if (url.includes("facebook.com")) return <FaFacebook className="w-5 h-5" />;
@@ -49,10 +49,10 @@ const LeftSidebar = () => {
         const snap = await getDoc(doc(db, "content", "social"));
         if (snap.exists()) {
           const data = snap.data();
-          const raw = data.links || [];
+          const raw = (data.links ?? []) as unknown[]; // avoid 'any'
 
-          const structured: SocialLink[] = raw.map((item: any) =>
-            typeof item === "string" ? { name: "", url: item } : item
+          const structured: SocialLink[] = raw.map((item) =>
+            typeof item === "string" ? { name: "", url: item } : (item as SocialLink)
           );
 
           setLinks(structured.slice(0, 5));
