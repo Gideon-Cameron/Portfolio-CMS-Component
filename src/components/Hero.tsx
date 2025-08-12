@@ -38,7 +38,7 @@ const Hero = () => {
 
   if (loading || !content) {
     return (
-      <section className="min-h-screen flex items-center justify-center text-dark-text-secondary font-mono bg-background w-full">
+      <section className="min-h-screen flex items-center justify-center font-mono bg-background w-full text-dark-text-secondary">
         Loading hero content...
       </section>
     );
