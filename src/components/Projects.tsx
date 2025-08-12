@@ -111,12 +111,13 @@ const Projects = () => {
           {projects.slice(0, showCount).map((project, index) => (
             <motion.div
               key={project.id || `${project.title}-${index}`}
-              className="bg-white dark:bg-dark-background border border-dark-accent/30 rounded shadow-sm transition hover:ring-2 hover:ring-dark-accent/30 hover:shadow-md"
+              className="bg-contactBackground dark:bg-contactBackgroundDark border border-dark-accent/30 rounded shadow-sm transition hover:ring-2 hover:ring-dark-accent/30 hover:shadow-md"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="bg-light-background-alt dark:bg-dark-background-alt p-[15px] rounded-t overflow-hidden">
+              {/* Image container */}
+              <div className="p-[15px] rounded-t overflow-hidden">
                 <div className="w-full aspect-video relative">
                   {project.imageUrl && (
                     <img
@@ -127,6 +128,8 @@ const Projects = () => {
                   )}
                 </div>
               </div>
+
+              {/* Text + buttons */}
               <div className="p-4 flex flex-col items-start gap-2">
                 <h3 className="text-lg font-semibold text-light-textPrimary dark:text-dark-textPrimary">
                   {project.title}
@@ -136,7 +139,7 @@ const Projects = () => {
                 </p>
                 <button
                   onClick={() => setSelected(project)}
-                  className="text-sm text-light-accent dark:text-dark-accent hover:opacity-80 cursor-pointer transition"
+                  className="text-sm text-accent font-medium hover:opacity-80 cursor-pointer transition"
                 >
                   View Details
                 </button>
@@ -158,7 +161,7 @@ const Projects = () => {
               onClick={() =>
                 setShowCount(showCount === 3 ? projects.length : 3)
               }
-              className="px-6 py-2 border border-dark-accent text-dark-accent rounded hover:bg-dark-accent/10 transition cursor-pointer"
+              className="px-6 py-2 border border-accent text-accent rounded hover:bg-accent/10 transition cursor-pointer"
             >
               {showCount === 3 ? "View More" : "Show Less"}
             </button>
@@ -174,13 +177,13 @@ const Projects = () => {
             animate={{ opacity: 1 }}
           >
             <motion.div
-              className="bg-white dark:bg-dark-background rounded-lg p-6 max-w-4xl w-full shadow-xl relative flex flex-col md:flex-row gap-6"
+              className="bg-contactBackground dark:bg-contactBackgroundDark rounded-lg p-6 max-w-4xl w-full shadow-xl relative flex flex-col md:flex-row gap-6"
               onClick={(e) => e.stopPropagation()}
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="md:w-[45%] bg-light-background-alt dark:bg-dark-background-alt rounded">
+              <div className="md:w-[45%] rounded">
                 <div className="p-[5px]">
                   {selected.imageUrl && (
                     <img
@@ -200,14 +203,14 @@ const Projects = () => {
 
                 {selected.skills && (
                   <div className="mt-6">
-                    <h4 className="text-sm font-semibold mb-2 text-dark-accent">
+                    <h4 className="text-sm font-semibold mb-2 text-accent">
                       Skills
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {selected.skills.map((skill) => (
                         <span
                           key={skill}
-                          className="text-xs px-3 py-1 rounded-full bg-dark-background-alt text-dark-accent border border-dark-accent/30"
+                          className="text-xs px-3 py-1 rounded-full bg-dark-background-alt text-accent border border-accent/30"
                         >
                           {skill}
                         </span>
@@ -222,7 +225,7 @@ const Projects = () => {
                       href={selected.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-4 py-2 border border-dark-accent text-dark-accent hover:bg-dark-accent/10 rounded transition cursor-pointer"
+                      className="px-4 py-2 border border-accent text-accent hover:bg-accent/10 rounded transition cursor-pointer"
                     >
                       Live Preview
                     </a>
@@ -231,7 +234,7 @@ const Projects = () => {
 
                 <button
                   onClick={handleClose}
-                  className="absolute top-3 right-4 text-xl text-dark-accent hover:opacity-75 cursor-pointer"
+                  className="absolute top-3 right-4 text-xl text-accent hover:opacity-75 cursor-pointer"
                 >
                   &times;
                 </button>
