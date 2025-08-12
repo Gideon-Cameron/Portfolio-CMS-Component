@@ -111,7 +111,7 @@ const Projects = () => {
           {projects.slice(0, showCount).map((project, index) => (
             <motion.div
               key={project.id || `${project.title}-${index}`}
-              className="bg-contactBackground dark:bg-contactBackgroundDark border border-dark-accent/30 rounded shadow-sm transition hover:ring-2 hover:ring-dark-accent/30 hover:shadow-md"
+              className="bg-[#f7efec] border border-dark-accent/30 rounded shadow-sm transition hover:ring-2 hover:ring-dark-accent/30 hover:shadow-md"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -177,7 +177,7 @@ const Projects = () => {
             animate={{ opacity: 1 }}
           >
             <motion.div
-              className="bg-contactBackground dark:bg-contactBackgroundDark rounded-lg p-6 max-w-4xl w-full shadow-xl relative flex flex-col md:flex-row gap-6"
+              className="bg-[#f7efec] rounded-lg p-6 max-w-4xl w-full shadow-xl relative flex flex-col md:flex-row gap-6"
               onClick={(e) => e.stopPropagation()}
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
