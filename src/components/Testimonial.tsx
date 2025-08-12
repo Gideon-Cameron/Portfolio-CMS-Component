@@ -11,26 +11,34 @@ type Testimonial = {
   projectLink?: string;
 };
 
-const Testimonial = () => {
+type TestimonialProps = {
+  sectionNumber?: number; // 👈 added
+};
+
+const Testimonial = ({ sectionNumber }: TestimonialProps) => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [enabled, setEnabled] = useState(true);
-  const [displayNumber, setDisplayNumber] = useState(6); // fallback
+  const [displayNumber, setDisplayNumber] = useState<number>(
+    sectionNumber ?? 6 // 👈 use prop if available
+  );
 
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
         const [snap, metaSnap] = await Promise.all([
           getDoc(doc(db, "content", "testimonials")),
-          getDoc(doc(db, "sections", "testimonials")), // ✅ fixed path
+          getDoc(doc(db, "sections", "testimonials")),
         ]);
 
         if (metaSnap.exists()) {
           const meta = metaSnap.data();
           setEnabled(meta.enabled ?? true);
-          setDisplayNumber(
-            typeof meta.displayNumber === "number" ? meta.displayNumber : 6
-          );
+          if (sectionNumber === undefined) {
+            setDisplayNumber(
+              typeof meta.displayNumber === "number" ? meta.displayNumber : 6
+            );
+          }
           console.log("⚙️ Testimonials section meta loaded:", meta);
         }
 
@@ -53,7 +61,7 @@ const Testimonial = () => {
     };
 
     fetchTestimonials();
-  }, []);
+  }, [sectionNumber]);
 
   if (loading) {
     return (
