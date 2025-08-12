@@ -18,7 +18,6 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
 
-// 🔁 Updated type
 type SocialLink = {
   name: string;
   url: string;
@@ -70,39 +69,41 @@ const LeftSidebar = () => {
   }, []);
 
   return (
-    <div className="hidden nav:flex fixed bottom-0 left-0 pl-4 pr-2 flex-col items-center space-y-6 z-40">
-      {links.map((link, index) => {
-        const icon = getIconForUrl(link.url);
-        if (!icon) return null;
+    <div className="hidden nav:flex fixed bottom-0 left-0 z-50 pointer-events-none">
+      <div className="flex flex-col items-center space-y-6 pointer-events-auto text-secondary pl-4 pr-2">
+        {links.map((link, index) => {
+          const icon = getIconForUrl(link.url);
+          if (!icon) return null;
 
-        return (
-          <motion.a
-            key={link.url}
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.2 + 0.5, duration: 0.5 }}
-            whileHover={{
-              color: "#64ffda",
-              transition: { duration: 0.2 },
-            }}
-            className="text-gray-600 dark:text-gray-400"
-            title={link.name || link.url}
-            aria-label={link.name || link.url}
-          >
-            {icon}
-          </motion.a>
-        );
-      })}
+          return (
+            <motion.a
+              key={link.url}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2 + 0.5, duration: 0.5 }}
+              whileHover={{
+                color: "#D7355D",
+                transition: { duration: 0.2 },
+              }}
+              className="text-secondary hover:text-accent transition-colors duration-200"
+              title={link.name || link.url}
+              aria-label={link.name || link.url}
+            >
+              {icon}
+            </motion.a>
+          );
+        })}
 
-      <motion.div
-        initial={{ height: 0, opacity: 0 }}
-        animate={{ height: "8rem", opacity: 1 }}
-        transition={{ delay: 1.2, duration: 0.6 }}
-        className="w-[2px] bg-[#111827] dark:bg-[#ccd6f6] mt-6 mb-2"
-      />
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "8rem", opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+          className="w-[2px] bg-secondary mt-6 mb-2"
+        />
+      </div>
     </div>
   );
 };
