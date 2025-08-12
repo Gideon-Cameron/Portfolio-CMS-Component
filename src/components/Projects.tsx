@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { db } from "../lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
+import { db } from "../lib/firebase";
 
 type Project = {
-  id: string;
+  id?: string;
   title: string;
   shortDescription: string;
   description: string;
@@ -13,12 +13,21 @@ type Project = {
   skills?: string[];
 };
 
+type ProjectsContent = {
+  list: Project[];
+};
+
+type ProjectsMeta = {
+  order?: number;
+  enabled?: boolean;
+};
+
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selected, setSelected] = useState<Project | null>(null);
   const [showCount, setShowCount] = useState(3);
   const [loading, setLoading] = useState(true);
-  const [sectionOrder, setSectionOrder] = useState(5); // Default fallback
+  const [sectionOrder, setSectionOrder] = useState<number>(5);
   const [enabled, setEnabled] = useState(true);
 
   const handleClose = () => setSelected(null);
@@ -26,28 +35,24 @@ const Projects = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const [projectSnap, metaSnap] = await Promise.all([
-          getDoc(doc(db, "content", "projects")),
-          getDoc(doc(db, "content/sections", "projects")),
-        ]);
-
-        if (metaSnap.exists()) {
-          const meta = metaSnap.data();
-          setSectionOrder(meta.order ?? 5);
-          setEnabled(meta.enabled ?? true);
-          console.log("⚙️ Projects meta loaded:", meta);
-        }
-
+        // ✅ Fetch main projects content
+        const projectSnap = await getDoc(doc(db, "content", "projects"));
         if (projectSnap.exists()) {
-          const data = projectSnap.data();
-          const items = (data.list || []) as Project[];
-          setProjects(items);
-          console.log("✅ Project data loaded:", items);
+          const data = projectSnap.data() as ProjectsContent;
+          setProjects(data.list || []);
         } else {
           console.warn("⚠️ Projects document does not exist.");
         }
+
+        // ✅ Fetch meta info for ordering and enable toggle
+        const metaSnap = await getDoc(doc(db, "content/sections", "projects"));
+        if (metaSnap.exists()) {
+          const meta = metaSnap.data() as ProjectsMeta;
+          setSectionOrder(meta.order ?? 5);
+          setEnabled(meta.enabled ?? true);
+        }
       } catch (err) {
-        console.error("❌ Error fetching project data", err);
+        console.error("❌ Failed to fetch projects data", err);
       } finally {
         setLoading(false);
       }
@@ -72,30 +77,29 @@ const Projects = () => {
   );
 
   if (!enabled || !hasValidProjects) {
-    console.log("🚫 Projects section hidden or empty");
     return null;
   }
 
   return (
     <section id="projects" className="max-w-6xl mx-auto px-6 md:px-12 py-20 md:py-24">
       {/* Section Heading */}
-{typeof sectionOrder === "number" && (
-  <motion.div
-    className="flex items-center mb-12"
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
-    viewport={{ once: true }}
-  >
-    <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
-      <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
-        0.{sectionOrder}
-      </span>
-      Projects
-    </h2>
-    <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
-  </motion.div>
-)}
+      {typeof sectionOrder === "number" && (
+        <motion.div
+          className="flex items-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-2xl font-bold text-light-accent dark:text-dark-accent font-mono whitespace-nowrap">
+            <span className="mr-2 font-mono text-light-accent dark:text-dark-accent">
+              0.{sectionOrder}
+            </span>
+            Projects
+          </h2>
+          <div className="h-px ml-5 flex-1 max-w-[300px] bg-dark-textSecondary relative -top-[5px]" />
+        </motion.div>
+      )}
 
       {/* Grid */}
       <motion.div
