@@ -1,22 +1,20 @@
-import { useEffect, useState, ReactNode } from "react";
-import { ThemeContext, Theme } from "./ThemeContext";
+import { ReactNode, useEffect } from "react";
+import { ThemeContext } from "./ThemeContext";
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem("theme");
-    // ✅ Default to light mode if nothing is stored
-    return stored === "dark" ? "dark" : "light";
-  });
+  const theme = "light"; // ✅ Always light mode
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme); // ✅ applies correct class to <html>
-    localStorage.setItem("theme", theme);
-  }, [theme]);
+    root.classList.remove("dark");
+    root.classList.add("light"); // ✅ Force light mode
+    localStorage.setItem("theme", "light");
+  }, []);
 
-  const toggleTheme = () =>
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  const toggleTheme = () => {
+    // ❌ Do nothing — dark mode is disabled
+    console.warn("Dark mode is disabled for this version.");
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
