@@ -80,7 +80,7 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-2xl font-bold text-accent font-playpen whitespace-nowrap">
+          <h2 className="text-2xl font-bold text-chocolate font-playpen whitespace-nowrap">
             <span className="mr-2 font-playpen text-accent">
               {String(sectionNumber).padStart(2, "0")}.
             </span>
