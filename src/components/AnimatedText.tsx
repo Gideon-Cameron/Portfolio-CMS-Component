@@ -6,6 +6,7 @@ type AnimatedTextProps = {
   as?: React.ElementType;
   className?: string;
   delay?: number;
+  duration?: number; // NEW
 };
 
 const AnimatedText = ({
@@ -13,6 +14,7 @@ const AnimatedText = ({
   as: Tag = "span",
   className = "",
   delay = 0,
+  duration = 0.6, // default duration
 }: AnimatedTextProps) => {
   const letters = Array.from(text);
 
@@ -21,7 +23,7 @@ const AnimatedText = ({
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.04,
+        staggerChildren: duration / letters.length, // evenly spreads over duration
         delayChildren: delay,
       },
     },
@@ -38,7 +40,7 @@ const AnimatedText = ({
       filter: "blur(0px)",
       y: 0,
       transition: {
-        duration: 0.45,
+        duration: duration * 0.6, // each character animation length
         ease: "easeOut",
       },
     },
