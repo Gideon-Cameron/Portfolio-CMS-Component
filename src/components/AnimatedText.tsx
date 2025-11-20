@@ -1,15 +1,16 @@
+import React from "react";
 import { motion, Variants } from "framer-motion";
 
 type AnimatedTextProps = {
   text: string;
-  as?: keyof JSX.IntrinsicElements; // h1, h2, p, etc.
+  as?: React.ElementType;
   className?: string;
-  delay?: number; // optional global delay
+  delay?: number;
 };
 
 const AnimatedText = ({
   text,
-  as = "span",
+  as: Tag = "span",
   className = "",
   delay = 0,
 }: AnimatedTextProps) => {
@@ -43,8 +44,6 @@ const AnimatedText = ({
     },
   };
 
-  const Tag = as;
-
   return (
     <Tag className={className}>
       <motion.span
@@ -55,11 +54,7 @@ const AnimatedText = ({
         className="inline-block"
       >
         {letters.map((char, index) => (
-          <motion.span
-            key={index}
-            variants={child}
-            className="inline-block"
-          >
+          <motion.span key={index} variants={child} className="inline-block">
             {char === " " ? "\u00A0" : char}
           </motion.span>
         ))}
