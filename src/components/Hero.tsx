@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../lib/firebase";
+import AnimatedText from "../components/AnimatedText";
 
 type HeroContent = {
   intro: string;
@@ -58,23 +59,21 @@ const Hero = () => {
           {intro}
         </motion.p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.6 }}
+        {/* UPDATED NAME ANIMATION */}
+        <AnimatedText
+          text={name}
+          as="h1"
           className="text-5xl sm:text-6xl md:text-7xl font-allura text-accent dark:text-dark-text-primary mb-2 leading-tight"
-        >
-          {name}
-        </motion.h1>
+          delay={0.35}
+        />
 
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
+        {/* UPDATED SUBTITLE ANIMATION */}
+        <AnimatedText
+          text={subtitle}
+          as="h2"
           className="text-4xl sm:text-5xl md:text-6xl font-tangerine text-accent dark:text-dark-text-secondary mb-6 leading-tight"
-        >
-          {subtitle}
-        </motion.h2>
+          delay={0.5}
+        />
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
